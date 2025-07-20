@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}   
+
+{% block title %}
+    Announcements
+{% endblock %}
+
+{% block content %}
+<div class="announcement_banner">
+    <h1>Lights On! Here's What's New</h1>
+</div>
+<div class="announcement">
+    <div class="announcement_warper">
+     {% if announcements %}
+     {% for a in announcements %}
+      <div class="announcement_box" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+
+
+      {% if a.image %}
+        <img src="{{ a.image.url }}" alt="Image" >
+      {% endif %}
+            <h3>{{ a.title }}</h3>
+      <small>{{ a.created_at|date:"M d, Y H:i" }}</small>
+      <p>{{ a.content }}</p>
+
+
+       </div>
+      {% endfor %}
+    {% else %}
+       <p>There is no announcement.</p>
+    {% endif %}
+    </div>
+</div>
+
+{%endblock%}
+<!-- <h2>📢 Announcements</h2>
+{% if announcements %}
+  {% for a in announcements %}
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+      <h3>{{ a.title }}</h3>
+      <small>{{ a.created_at|date:"M d, Y H:i" }}</small>
+      <p>{{ a.content }}</p>
+
+      {% if a.image %}
+        <img src="{{ a.image.url }}" alt="Image" style="max-width: 100%; height: auto;">
+      {% endif %}
+
+
+    </div>
+  {% endfor %}
+{% else %}
+  <p>There is no announcement.</p>
+{% endif %} -->

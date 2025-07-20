@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}   
+
+{% block title %}
+    REGISTER
+{% endblock %}
+{% block content %}
+<div class="registation_banner">
+    <h1>ENTER YOUR VERIFICATION CODE</h1>
+</div>
+<div class="registation_from">
+ 
+
+    <div class="registation_from_warper">
+      <div class="registaion_box">
+                   
+
+
+<form method="POST" class="Verify_from ">
+  <h2 class="Verify_h2">Verify Your Email</h2>
+{% if error %}
+  <p style="color: red">{{ error }}</p>
+{% endif %}
+  {% csrf_token %}
+  <input type="text" name="code" placeholder="Enter the 6-digit code" required>
+  <button class="join_now" type="submit">Verify</button>
+</form>
+
+      </div>
+    </div>
+
+</div>
+{%endblock%}
+
+
+
+
+
+
+
+
+
+
+
+
+
