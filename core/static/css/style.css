@@ -11,7 +11,7 @@ body,html{
 .hide-scrollbar::-webkit-scrollbar {
   display: none;               /* Chrome, Safari, Opera */
 }
-h1{
+h1,h2,h3{
     font-family: roboto;
 }
 /* header style */
@@ -1622,4 +1622,107 @@ background: linear-gradient(90deg, #0072ff, #0292b9);
   width: 100%;
   justify-content: space-between;
   display: flex;
+}
+.about_main{
+  width: 100%;
+  color: #fff;
+  background: url('../img/ano_bg.jpg') no-repeat;
+    background-size: cover;
+  background-position:center ;
+}
+.club_overeview{
+  margin: 0 auto;
+  display: flex;
+  width: 95%;
+  padding-top: 100px;
+  flex-direction: column;
+  align-items: center;
+}
+.logo_section img{
+  width: 250px;
+}
+.club_overeview p{
+  font-size: 20px;
+  font-family: poppins;
+}
+.club_overeview h2{
+  font-size: 30px;
+  font-weight: 600;
+}
+.club_overeview h1{
+  font-size: 30px;
+  font-weight: 600;
+}
+.club_member{
+
+ 
+  width: 95%;
+  
+  margin: 0 auto;
+}
+.advisor h2{
+  text-transform: uppercase;
+  font-weight: 500;
+  text-shadow: 0px 6px 5px rgba(160, 160, 160, 0.3);
+  font-family: poppins;
+  text-align: center;
+  color: #57ddff;
+  margin-bottom: 20px;
+  font-size: 35px;
+}
+.executive h2{
+  margin: 40px 0;
+
+  text-transform: uppercase;
+  font-weight: 500;
+  text-shadow: 0px 6px 5px rgba(160, 160, 160, 0.3);
+  font-family: poppins;
+  text-align: center;
+  font-size: 35px;
+  color: #57ddff;
+}
+.profile{
+    background: rgba(165, 165, 165, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.219);
+  position: relative;
+  box-shadow: 0 0 2px  #fff;
+  /* background: #075E98;
+  background: linear-gradient(359deg,rgba(7, 94, 152, 1) 0%, rgba(84, 169, 202, 0.63) 98%);
+  border: 1px solid rgba(255, 255, 255, 0.219); */
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+  border-radius: 10px;
+  padding: 20px;
+}
+.profile img{
+  width: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 10px;
+  aspect-ratio: 1/1;
+}
+.social_icon_for_member a,i{
+  font-size: 25px;
+  color: #fff;
+  text-decoration: none;
+}
+.profile h3{
+  font-weight: 500;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+.profile p{
+  font-size: 16px;
+  color: #57ddff;
+  font-weight: 600;
+}
+.social_icon_for_member{
+  display: flex;
+  gap: 10px ;
+}
+.member_container{
+display: flex;
+gap: 20px;
+justify-content: center;
 }

@@ -5,56 +5,88 @@
     ABOUT US
 {% endblock %}
 
+{% block content %}
+<div class="about_main">
+    <div class="club_overeview">
+        <div class="logo_section">
+            <img src="{% static 'img/logo.webp' %}" alt="">
 
-    <h1 class="section-title">Advisory</h1>
-    <div class="container">
-        {% for person in advisors %}
-            <div class="profile">
-                <img src="{{ person.image.url }}" alt="{{ person.name }}">
-                <h3>{{ person.name }}</h3>
-                <p>{{ person.bio }}</p>
-                <div>
-                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
-                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
-                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
-                </div>
-            </div>
-       
+        </div>
+        <h1>BANGLADESH SWEDEN POLYTECHNIC COMPUTER CLUB</h1>
+        <p style="color: rgba(255, 255, 255, 0.753);">FOUNDED IN <span style="color: #24a7ff; font-weight: 600;">2025</span></p>
+        <h2 style="text-transform: uppercase;">The silent engines powering our club's every move.</h2>
+
+   
     </div>
+     
+ 
 
-    <h1 class="section-title">Executive Board</h1>
-    <div class="container">
-        {% for person in executives %}
+<div class="club_member">
+    <div class="advisor">
+        <h2 class="section-title">Advisory</h2>
+    <div class="member_container">
+        {% for person in advisors %}
+        
             <div class="profile">
                 <img src="{{ person.image.url }}" alt="{{ person.name }}">
                 <h3>{{ person.name }}</h3>
                 <p>{{ person.position }}</p>
-                <div>
-                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
-                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
-                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
+                <div class="social_icon_for_member">
+                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank"><i class="ri-linkedin-box-fill"></i></a> {% endif %}
+                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank"><i class="ri-facebook-circle-fill"></i></a> {% endif %}
+                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank"><i class="ri-twitter-fill"></i></a> {% endif %}
                 </div>
             </div>
         {% endfor %}
     </div>
+    </div>
+    <div class="executive" >
 
-    <h1 class="section-title">General Members</h1>
-    <div class="container">
-        {% for person in generals %}
-            <div class="profile">
-                <img src="{{ person.image.url }}" alt="{{ person.name }}">
-                <h3>{{ person.name }}</h3>
-                <p>{{ person.position }}</p>
-                <div>
-                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
-                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
-                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
-                </div>
+        <h2 class="section-title">Executive Board</h1>
+        <div class="member_container">
+            {% for person in executives %}
+                <div class="profile">
+                    <img src="{{ person.image.url }}" alt="{{ person.name }}">
+                    <h3>{{ person.name }}</h3>
+                    <h4 style="font-weight: 400; font-family: poppins;">{{person.bio}}</h4>
+                    <p>{{ person.position }}</p>
+                    <div class="social_icon_for_member">
+                        {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank"><i class="ri-linkedin-box-fill"></i></a> {% endif %}
+                        {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank"><i class="ri-facebook-circle-fill"></i></a> {% endif %}
+                        {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank"><i class="ri-twitter-fill"></i></a> {% endif %}
+                    </div>
+            
+           </div>
+           {% endfor %}
+        </div>
+        
+</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- <div class="leader">
+    
+<h1 class="section-title">General Members</h1>
+<div class="container">
+    {% for person in generals %}
+        <div class="profile">
+            <img src="{{ person.image.url }}" alt="{{ person.name }}">
+            <h3>{{ person.name }}</h3>
+            <p>{{ person.position }}</p>
+            <div>
+                {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
+                {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
+                {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
             </div>
-   
+        </div>
+    {% endfor %}
+</div> -->
 
-
-
-{% block content %}
-
+</div>
 {% endblock %}

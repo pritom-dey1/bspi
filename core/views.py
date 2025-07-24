@@ -18,15 +18,15 @@ from django.contrib import messages
 from .models import Person
 
 def about_page(request):
-    advisors = Person.objects.filter(role='advisor')
-    executives = Person.objects.filter(role='executive')
-    generals = Person.objects.filter(role='general')[:5]
-    
-    return render(request, 'about.html', {
-        'advisors': advisors,
-        'executives': executives,
-        'generals': generals,
-    })
+        advisors = Person.objects.filter(role='advisor')
+        executives = Person.objects.filter(role='executive')
+        generals = Person.objects.filter(role='general')[:5]
+        
+        return render(request, 'about.html', {
+            'advisors': advisors,
+            'executives': executives,
+            'generals': generals,
+        })
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -186,8 +186,7 @@ def approve_member(request, user_id):
 @login_required
 def user_dashboard(request):
     return render(request, 'user_dashboard.html')
-def about_page(request):
-    return render(request,'about.html')
+
 
 @login_required
 def learning_page(request):
