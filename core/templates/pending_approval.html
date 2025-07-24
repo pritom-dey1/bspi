@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+    PENDING
+{% endblock %}
+{% block content %}
+   <div class="announcement_banner">
+    <h1>ON PENDING</h1>
+   </div>
+   <div class="announcement" style="padding: 70px 0;">
+    <div class="pending">
+    <h2>your email is verified</h2>
+    <p>⏳ Your account is pending approval from your leader.</p>
+    <p>Please wait. You'll be notified once approved.</p>
+    <a href="{%url 'login'%}">Back to Login</a>
+  </div>
+   </div>
+
+{% endblock %}

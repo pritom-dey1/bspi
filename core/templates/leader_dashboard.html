@@ -1,26 +1,108 @@
-<h2>{{ wing }} Wing - Leader Dashboard</h2>
+{% extends 'base.html' %}
+{% load static %}
 
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Verified</th>
-    </tr>
-    {% for member in members %}
-    <tr>
-        <td>{{ member.username }}</td>
-        <td>{{ member.email }}</td>
-        <td>
-            {% if member.is_email_verified %}
-                ✅ Verified
-            {% else %}
-                ❌ Not Verified
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<form method="post" action="{% url 'logout' %}">
+{% block title %}
+    DASHBOARD
+{% endblock %}
+
+{% block content %}
+<div class="dashboard_content">
+  <div class="dash_warper">
+
+    <div class="dashboard_top">
+      <div class="dash_top_left">
+        {% if request.user.profile_pic %}
+          <img src="{{ request.user.profile_pic.url }}" alt="Leader Pic">
+        {% else %}
+          <p><em>No profile picture uploaded.</em></p>
+        {% endif %}
+      </div>
+
+      <div class="dash_top_right">
+        <h2>Welcome, {{ request.user.username }} (CsLeader)</h2>
+        <div class="details">
+          <div class="details_top">
+            <p>Department: <span style="color: #1cacff; font-weight: 600;">{{ request.user.department }}</span></p>
+            <p>Semester: <span style="color: #1cacff; font-weight: 600;">{{ request.user.semester }}</span></p>
+            <p>Wing: <span style="color: #1cacff; font-weight: 600;">{{ request.user.wing }}</span></p>
+          </div>
+          <!-- Optional Stats (Uncomment if needed)
+          <div class="details_bottom">
+            <p>Total Approved Members: <span>{{ approved_members|length }}</span></p>
+            <p>Total Pending Members: <span>{{ pending_members|length }}</span></p>
+          </div>
+          -->
+        </div>
+      </div>
+    </div>
+
+    <div class="dash_main">
+      <div class="dash_main_left">
+        <h2>Approved Members of {{ request.user.wing }}🟢</h2>
+        
+          {% for member in approved_members %}
+            <li style="margin-bottom: 10px;">
+              {% if member.profile_pic %}
+                <img src="{{ member.profile_pic.url }}" alt="{{ member.username }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; vertical-align: middle;">
+              {% else %}
+                <span style="display: inline-block; width: 40px; height: 40px; background: #ccc; border-radius: 50%; text-align: center; line-height: 40px;">🧑</span>
+              {% endif %}
+              {{ member.username }} - {{ member.department }} ({{ member.semester }})
+            </li>
+          {% empty %}
+            <li>No approved members yet.</li>
+          {% endfor %}
+        
+      </div>
+      <div class="dash_main_right">
+       
+<h2> Pending Approvals 🕒</h2>
+
+  {% for member in pending_members %}
+    <div class="pending_div">
+
+    
+            <div style="margin-top: 10px;" class="pending_member">
+                  {% if member.profile_pic %}
+        <img src="{{ member.profile_pic.url }}" alt="{{ member.username }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; vertical-align: middle;">
+      {% else %}
+        <span style="display: inline-block; width: 40px; height: 40px; background: #ccc; border-radius: 50%; text-align: center; line-height: 40px;">🧑</span>
+      {% endif %}
+       {{ member.username }} - {{ member.department }} ({{ member.semester }})
+            </div>
+              <form style="margin-top: 10px;" action="{% url 'approve_member' member.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button class="join_now" style="padding: 0; background: none; border-radius: 5px;
+        padding: 3px 5px;" type="submit">Approve</button>
+      </form>
+
+
+ 
+    </div>
+  {% empty %}
+    <li>No pending members.</li>
+  {% endfor %}
+       <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
+    <button type="submit" class="join_now" style="padding: 0; background: none; border-radius: 5px;
+        padding: 3px 7px; font-weight: 600; margin-top: 80px; color: rgb(255, 23, 23); position: relative; left: 87%; transform: translateX(-50%);"
+    ">
+       Logout
+    </button>
+  </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+
+  
+
+
+
+
+
+
+

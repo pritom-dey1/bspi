@@ -65,6 +65,48 @@ class CustomUser(AbstractUser):
     
     # New field to identify leader or member
     is_leader = models.BooleanField(default=False)
-
+    is_approved = models.BooleanField(default=False)
+    profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     def __str__(self):
         return self.username
+    
+    
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)                  # Event er title
+    description = models.TextField()                           # Event er details ba description
+    main_image = models.ImageField(upload_to='events/', blank=True, null=True)  # Main banner image (optional)
+    created_at = models.DateTimeField(default=timezone.now)   # Created date/time
+
+    def __str__(self):
+        return self.title
+    
+    
+class EventMomentImage(models.Model):
+    event = models.ForeignKey(Event, related_name='moments', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='event_moments/')
+    caption = models.CharField(max_length=200, blank=True, null=True)  # optional
+
+    def __str__(self):
+        return f"Moment for {self.event.title}"
+    
+    
+
+class Person(models.Model):
+    ROLE_CHOICES = [
+        ('advisor', 'Advisor'),
+        ('executive', 'Executive Board'),
+        ('general', 'General Member'),
+    ]
+
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    position = models.CharField(max_length=100, blank=True)  # e.g., Tech Team Lead
+    bio = models.TextField(blank=True)
+    image = models.ImageField(upload_to='profiles/')
+    linkedin = models.URLField(blank=True)
+    facebook = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.role})"

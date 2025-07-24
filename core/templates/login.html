@@ -4,45 +4,57 @@
 {% block title %}
     LogIn
 {% endblock %}
+
 {% block content %}
 <div class="login_banner">
     <h1>LOGIN IN BSPI COMPUTER CLUB</h1>
 </div>
+
 <div class="login_from">
- 
-
     <div class="login_from_warper">
-      <div class="login_box">
-                   
+        <div class="login_box">
 
+            <form method="post" class="login-form">
+                <h2>Login Here</h2>
+                {% csrf_token %}
 
-<form method="post" class="login-form">
-    <h2>Login Here</h2>
-    {% csrf_token %}
+                <!-- ✅ Message block for leader approval / any Django messages -->
+                {% if messages %}
+                  <div class="message-container">
+                    {% for message in messages %}
+                      <p style="color: red; font-weight: bold; text-align: center;">
+                        {{ message }}
+                      </p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
 
-    <div class="form-group">
-        <input placeholder="Enter Your Username" type="text" name="username" id="id_username" class="input-field">
+                <div class="form-group">
+                    <input placeholder="Enter Your Username" type="text" name="username" id="id_username" class="input-field">
+                </div>
+
+                <div class="form-group">
+                    <input placeholder="Enter Your Password" type="password" name="password" id="id_password" class="input-field">
+                </div>
+
+                <button type="submit" class="login-button">Log in</button>
+                
+                <!-- 🔻 Errors from form (invalid username/pass) -->
+                <div class="error_box">
+                    {% if form.errors %}
+                        <p style="color:red; text-align:center;">Invalid login. Please try again.</p>
+                    {% endif %}
+                </div>
+
+                <p style="text-align:center; margin-top: 10px;">
+                    Don't have an account? 
+                    <a style="text-decoration: none; font-weight: 600; color:#028ec2;" href="{% url 'register' %}">
+                        Register here
+                    </a>
+                </p>
+            </form>
+
+        </div>
     </div>
-
-    <div class="form-group">
-        <input placeholder="Enter Your Password" type="password" name="password" id="id_password" class="input-field">
-    </div>
-
-    <button type="submit" class="login-button ">Log in</button>
-    <div class="error_box">
-            {% if form.errors %}
-    <p style="color:red;">Invalid login. Please try again.</p>
-    {% endif %}
-
-    <p>Don't have an account? <a  style="text-decoration: none; font-weight: 600; color:#028ec2;" href="{% url 'register' %}">Register here</a></p>
-
-    </div>
-</form>
-
-
-      </div>
-    </div>
-
 </div>
-{%endblock%}
-
+{% endblock %}

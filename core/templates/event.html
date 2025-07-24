@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+EVENT{% endblock %}
+{% block content %}
+<div class="announcement_banner">
+    <h1>Our Journey So Far</h1>
+</div>
+
+
+<div class="event_content">
+      <div class="events_wrapper">
+    {% if events %}
+      {% for event in events %}
+        <div class="announcement_box">
+          {% if event.main_image %}
+            <img style="width: 100%;height: 450px; object-fit: cover;" src="{{ event.main_image.url }}" alt="{{ event.title }}" style="max-width: 100%; height: auto;">
+          {% endif %}
+
+          <h3>{{ event.title }}</h3>
+          <p>{{ event.description|truncatewords:15 }}</p>  {# 15 word excerpt #}
+
+          <a href="{% url 'event_detail' event.id %}">
+            <button class="join_now" style="margin-top: 8px;">View Details</button>
+          </a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No events found.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

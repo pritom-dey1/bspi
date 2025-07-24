@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ announcement.title }}
+{% endblock %}
+
+{% block content %}
+<div class="single_anno_banner" style="
+    background-image: url('{{ announcement.image.url }}');
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+">
+
+       
+</div>
+<div class="anno_warper">
+<div class="announcement_detail">
+    <div class="anno_content">
+           <div class="container">
+         <h1 style="color: #fff;">{{ announcement.title }}</h1>
+        <small style="color: #fff;">{{ announcement.created_at|date:"M d, Y H:i" }}</small>
+       
+        <p>{{ announcement.content }}</p>
+
+        {% if announcement.question %}
+            <h3>Question:</h3>
+            <p>{{ announcement.question }}</p>
+        {% endif %}
+        {% if announcement.answer %}
+            <h3>Answer:</h3>
+            <p>{{ announcement.answer }}</p>
+        {% endif %}
+
+        <a href="{% url 'announcements' %}"><button style="margin-top: 10px;" class="join_now">GO BACK</button></a>
+    </div>       
+    </div>
+
+</div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ event.title }}
+{% endblock %}
+{% block content %}
+<div class="single_event_banner"
+style="
+  background-image: url('{{ event.main_image.url }} ');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    color: white;
+">
+
+</div>
+<div class="single_event_full_page">
+  <div class="event_warper">
+             <div class="container">
+        <h1 style="margin-bottom: 10px; color: #fff; text-align: center;">{{ event.title }}</h1>
+        
+    <p >{{ event.description }}</p>
+    
+    {% if event.moments.all %}
+    <h2 style="margin-bottom: 10px;">SOME MOMENTS TO CAPTURE</h2>
+      <section id="moments" >
+        
+        <div class="moments-gallery">
+          {% for moment in event.moments.all %}
+            {% if moment.image %}
+              <div class="moment-item">
+                <img src="{{ moment.image.url }}" alt="{{ moment.caption|default:'Moment image' }}">
+                {% if moment.caption %}
+                  <p style="color: #fff;">{{ moment.caption }}</p>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+        <a href="{% url 'event_list' %}"><button style="margin-top: 20px; position: relative
+        ;
+        left: 50%;
+        transform: translateX(-50%);" class="join_now">GO BACK</button></a>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+<!-- 
+
+
+       
+</div>
+<div class="anno_warper">
+<div class="announcement_detail">
+    <div class="anno_content" style="width: 80%; position: relative;">
+  
+    </div>
+
+</div>
+</div> -->

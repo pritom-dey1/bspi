@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}   
+
+{% block title %}
+    ABOUT US
+{% endblock %}
+
+
+    <h1 class="section-title">Advisory</h1>
+    <div class="container">
+        {% for person in advisors %}
+            <div class="profile">
+                <img src="{{ person.image.url }}" alt="{{ person.name }}">
+                <h3>{{ person.name }}</h3>
+                <p>{{ person.bio }}</p>
+                <div>
+                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
+                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
+                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
+                </div>
+            </div>
+       
+    </div>
+
+    <h1 class="section-title">Executive Board</h1>
+    <div class="container">
+        {% for person in executives %}
+            <div class="profile">
+                <img src="{{ person.image.url }}" alt="{{ person.name }}">
+                <h3>{{ person.name }}</h3>
+                <p>{{ person.position }}</p>
+                <div>
+                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
+                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
+                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h1 class="section-title">General Members</h1>
+    <div class="container">
+        {% for person in generals %}
+            <div class="profile">
+                <img src="{{ person.image.url }}" alt="{{ person.name }}">
+                <h3>{{ person.name }}</h3>
+                <p>{{ person.position }}</p>
+                <div>
+                    {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank">LinkedIn</a> {% endif %}
+                    {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank">Facebook</a> {% endif %}
+                    {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank">Twitter</a> {% endif %}
+                </div>
+            </div>
+   
+
+
+
+{% block content %}
+
+{% endblock %}

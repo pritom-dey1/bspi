@@ -13,15 +13,21 @@
     <div class="announcement_warper">
      {% if announcements %}
      {% for a in announcements %}
-      <div class="announcement_box" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+      <div class="announcement_box" >
 
 
       {% if a.image %}
-        <img src="{{ a.image.url }}" alt="Image" >
+        <img src="{{ a.image.url }}" style="height: 450px;" alt="Image" >
       {% endif %}
             <h3>{{ a.title }}</h3>
       <small>{{ a.created_at|date:"M d, Y H:i" }}</small>
-      <p>{{ a.content }}</p>
+      <p>{{ a.content|slice:":100" }}{% if a.content|length > 100 %}...{% endif %}</p>
+
+      <a href="{% url 'announcement_detail' a.id %}">
+        <button class="join_now" style="margin-top: 10px;">
+          VIEW DETAILS
+        </button>
+      </a>
 
 
        </div>
