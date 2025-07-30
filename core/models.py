@@ -29,18 +29,14 @@ class ContactMessage(models.Model):
         return f"Message from {self.name}"
     
     
-    
 
 class CustomUser(AbstractUser):
-    SEMESTER_CHOICES = [
-        ('1st', '1st'),
-        ('2nd', '2nd'),
-        ('3rd', '3rd'),
-        ('4th', '4th'),
-        ('5th', '5th'),
-        ('6th', '6th'),
-        ('7th', '7th'),
-        ('8th', '8th'),
+    SESSION_CHOICES = [
+        ('25-26', '25-26'),
+        ('24-25', '24-25'),
+        ('23-24', '23-24'),
+        ('22-23', '22-23'),
+        ('21-22', '21-22'),
     ]
 
     DEPARTMENT_CHOICES = [
@@ -48,6 +44,7 @@ class CustomUser(AbstractUser):
         ('ET', 'Electrical'),
         ('MT', 'Mechanical'),
         ('CMT', 'Civil'),
+        ('AUT', 'Automobile'),
     ]
 
     WING_CHOICES = [
@@ -55,21 +52,21 @@ class CustomUser(AbstractUser):
         ('Graphics Design', 'Graphics Design'),
         ('Artificial Intelligence', 'Artificial Intelligence'),
         ('Cybersecurity', 'Cybersecurity'),
+        ('IT and Hardware Support', 'IT and Hardware Support'),
     ]
 
-    semester = models.CharField(max_length=10, choices=SEMESTER_CHOICES)
+    session = models.CharField(max_length=10, choices=SESSION_CHOICES)
     department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES)
     wing = models.CharField(max_length=100, choices=WING_CHOICES)
     is_email_verified = models.BooleanField(default=False)
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     
-    # New field to identify leader or member
     is_leader = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
     def __str__(self):
         return self.username
-    
     
 
 class Event(models.Model):
@@ -110,3 +107,24 @@ class Person(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.role})"
+    
+
+
+class LeaderboardMember(models.Model):
+    name = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='leaderboard_images/')
+    project_name = models.CharField(max_length=100)
+    project_link = models.URLField()
+
+    def __str__(self):
+        return self.name
+    
+class LearningMaterial(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='learning_materials/')
+    wing = models.CharField(max_length=100, choices=CustomUser.WING_CHOICES)
+    content_link = models.URLField(blank=True) 
+
+    def __str__(self):
+        return self.title

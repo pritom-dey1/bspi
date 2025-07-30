@@ -16,6 +16,9 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Person
+from .models import LeaderboardMember
+from .models import LearningMaterial
+
 
 def about_page(request):
         advisors = Person.objects.filter(role='advisor')
@@ -52,6 +55,9 @@ def post_login_redirect(request):
         return redirect('login')
 
 def home(request):
+    members = LeaderboardMember.objects.all()[:5]
+    latest_event = Event.objects.order_by('-created_at').first()
+
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -61,8 +67,11 @@ def home(request):
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
     form = ContactForm()
-    return render(request, 'home.html', {'form': form})
-
+    return render(request, 'home.html', {
+        'form': form,
+        'members': members,
+        'latest_event': latest_event,
+    })
 def announcement_page(request):
     announcements = Announcement.objects.all().order_by('-created_at')
     return render(request, 'announcement.html', {'announcements': announcements})
@@ -232,3 +241,9 @@ class ApprovalCheckMiddleware:
                 logout(request)
                 return redirect('login')
         return self.get_response(request)
+    
+@login_required
+def learning_page(request):
+    user_wing = request.user.wing
+    lessons = LearningMaterial.objects.filter(wing=user_wing)
+    return render(request, 'learning.html', {'lessons': lessons})

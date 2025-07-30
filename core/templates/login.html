@@ -40,13 +40,13 @@
                 <button type="submit" class="login-button">Log in</button>
                 
                 <!-- 🔻 Errors from form (invalid username/pass) -->
-                <div class="error_box">
+                <div class="error_box" style="display:block;">
                     {% if form.errors %}
-                        <p style="color:red; text-align:center;">Invalid login. Please try again.</p>
+                        <p style="display: block ; width: 100%;  color:red; text-align:center; text-transform: uppercase;">Invalid login. Please try again.</p>
                     {% endif %}
                 </div>
 
-                <p style="text-align:center; margin-top: 10px;">
+                <p class="p_res" style="font-family: poppins; text-transform: uppercase; text-align:center; margin-top: 10px;">
                     Don't have an account? 
                     <a style="text-decoration: none; font-weight: 600; color:#028ec2;" href="{% url 'register' %}">
                         Register here

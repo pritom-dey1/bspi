@@ -23,7 +23,7 @@
         <div class="details">
           <div class="details_top">
             <p>Department: <span style="color: #1cacff; font-weight: 600;">{{ request.user.department }}</span></p>
-            <p>Semester: <span style="color: #1cacff; font-weight: 600;">{{ request.user.semester }}</span></p>
+            <p>Session: <span style="color: #1cacff; font-weight: 600;">{{ request.user.session }}</span></p>
             <p>Wing: <span style="color: #1cacff; font-weight: 600;">{{ request.user.wing }}</span></p>
           </div>
           <!-- Optional Stats (Uncomment if needed)
@@ -38,7 +38,7 @@
 
     <div class="dash_main" style="flex-direction: column; gap: 20px; display: flex;align-items: center;justify-content: center;">
      
-      <h2>YOUR DASHBOARD WILL BE UPDATED SOON</h2>
+      <h2 style="text-align:center;">YOUR DASHBOARD WILL BE UPDATED SOON</h2>
              <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit" class="join_now" style=" background: none; border-radius: 5px;

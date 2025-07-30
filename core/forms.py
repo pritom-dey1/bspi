@@ -13,9 +13,9 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'semester', 'department', 'wing', 'password']
+        fields = ['username', 'email', 'session', 'department', 'wing', 'password']
         widgets = {
-            'semester': forms.Select(attrs={'class': 'form-select'}),
+            'session': forms.Select(attrs={'class': 'form-select'}),
             'department': forms.Select(attrs={'class': 'form-select'}),
             'wing': forms.Select(attrs={'class': 'form-select'}),
         }

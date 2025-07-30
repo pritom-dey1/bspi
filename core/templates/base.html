@@ -14,102 +14,82 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <!-- <div class="preloader">
-  <div class="circle-container">
-    <!-- Dots will be inserted by JavaScript -->
-  <!-- </div>
-  <div class="initializing-text-container">
-    <div class="initializing-progress"></div>
-    <div class="initializing-text">INITIALIZING</div>
-  </div>
-</div> --> 
+    <div class="loader">
+
+    </div>
     <header>
-       <div class="header_warper">
+      <div class="header_warper">
         <div class="logo">
-            <img src="{% static 'img/logo.webp' %}" alt="logo">
+         <a href=""> <img href="" src="{% static 'img/logo.webp' %}" alt="logo" /></a>
         </div>
-        <div class="links">
-            <a href="/">Home</a>
-            <a href="{%url 'about'%}">About</a>
-            <a href="{% url 'event_list'%}">Events</a>
-            <a href="{% url 'announcements' %}">Announcements</a>
-         </div>
-         <div class="nav_buttons">
+        <div class="links desktop-links">
+          <a href="/">Home</a>
+          <a href="{% url 'about' %}">About</a>
+          <a href="{% url 'event_list' %}">Events</a>
+          <a href="{% url 'announcements' %}">Announcements</a>
+        </div>
+        <div class="nav_buttons">
           <a style="text-decoration: none;" href="{% url 'post_login_redirect' %}">
-  <i  class="ri-account-circle-fill"></i>
-</a>
-           <button class="start_learning"><a href="{% url 'go_to_learning' %}">Start Learning</a></button>
-            
-         </div>
-       </div>
+            <i class="ri-account-circle-fill"></i>
+          </a>
+          <button class="start_learning">
+            <a href="{% url 'go_to_learning' %}">Start Learning</a>
+          </button>
+          <i id="menu" class="ri-menu-3-line"></i>
+        </div>
+      </div>
+    
+      <!-- Side Menu -->
+      <div id="sideMenu" class="side-menu">
+        <div class="close-btn" id="closeMenu">&times;</div>
+        <a href="/">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'event_list' %}">Events</a>
+        <a href="{% url 'announcements' %}">Announcements</a>
+        <a href="{% url 'post_login_redirect' %}">Account</a>
+        <a href="{% url 'go_to_learning' %}" class="learning-btn">Start Learning</a>
+      </div>
     </header>
     <div class="main">
     {% block content %}
     {% endblock %}
-      <footer>
+      <footer style="padding-top: 70px;">
       <div class="footer_content">
-       <div class="footer_top">
-
-        <p>HAVE A SUGGESTION IN MIND?</p> <br>
-        <h2>LET'S CONNECT</h2>
-      
-
-       </div>
-       <div class="footer_middle">
-        
-<div class="contact_warper">
-  <div class="contact_form_section">
-  
-
-  <div id="success-message" style="margin-bottom: 10px; color: rgb(0, 184, 0); font-family: poppins; font-weight: 500; display: none;"></div>
-  <div id="error-message" style=" margin-bottom: 10px;color: red; display: none;font-family: poppins; font-weight: 500;"></div>
-
-<form id="contact-form" method="POST">
-  {% csrf_token %}
-
-  <div class="form-group">
-    <input placeholder="Enter Your Name" type="text" name="name" id="id_name" class="form-control" required>
-  </div>
-
-  <div class="form-group">
-    <input placeholder="Enter Your Email" type="email" name="email" id="id_email" class="form-control" required>
-  </div>
-
-  <div class="form-group">
-    <textarea placeholder="Enter The Description" name="message" id="id_message" class="form-control" rows="4" required></textarea>
-  </div>
-
-  <button style="position: relative; left: 50%; transform: translateX(-50%);" class="join_now" type="submit" id="submit-button">Send Message</button>
-</form>
-</div>
-
-</div>
-       </div>
-       <div class="footer_bottom">
-        <div class="icon">
+          
+        <img src="{% static 'img/logo.webp' %}" alt="logo">
+        <h2 style="font-weight: 500;">BSPI COMPUTER CLUB</h2>
+        <P style="text-transform: uppercase; font-family: poppins;">Here at BSPI Computer Club, we don’t just learn tech <br> we master it, share it, and use it to change lives</P>
+        <div class="social_icon">
           <i class="ri-facebook-circle-fill"></i>
+          <i class="ri-youtube-fill"></i>
+          <i class="ri-twitter-fill"></i>
           <i class="ri-linkedin-box-fill"></i>
-          <i class="ri-whatsapp-fill"></i>
-          <i class="ri-mail-fill"></i>
         </div>
-        <div class="copy">
-          <p>© 2025 BSPI COMPUTER CLUB. All rights reserved.</p>
-          <p>Design and Developed By CST59</p>
+        <div class="page_links" style="font-weight: 500; text-transform: uppercase; font-family: poppins;">
+          <a href="/">Home</a>
+          <a href="{%url 'about'%}">About</a>
+          <a href="{% url 'event_list'%}">Events</a>
+          <a href="{% url 'announcements' %}">Announcements</a>
         </div>
-       </div>
+        <div class="footer_bottom">
+          <p >&copy; 2025 BSPI Computer Club. All rights reserved.</p>
+          <p>DESING AND DEVELOPED BY CST59</p>
+        </div>
+
       </div>
     </footer>
     </div>
   
 
     <!-- js cdns -->
-     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- for loader  -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/ScrollToPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
-    <script type="module" src="{% static 'js/app.js' %}"></script>
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script type="module" src="{% static 'js/app.js' %}"></script> 
 </body>
 </html>

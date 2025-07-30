@@ -23,7 +23,7 @@
         <div class="details">
           <div class="details_top">
             <p>Department: <span style="color: #1cacff; font-weight: 600;">{{ request.user.department }}</span></p>
-            <p>Semester: <span style="color: #1cacff; font-weight: 600;">{{ request.user.semester }}</span></p>
+            <p>Session: <span style="color: #1cacff; font-weight: 600;">{{ request.user.session }}</span></p>
             <p>Wing: <span style="color: #1cacff; font-weight: 600;">{{ request.user.wing }}</span></p>
           </div>
           <!-- Optional Stats (Uncomment if needed)
@@ -47,7 +47,7 @@
               {% else %}
                 <span style="display: inline-block; width: 40px; height: 40px; background: #ccc; border-radius: 50%; text-align: center; line-height: 40px;">🧑</span>
               {% endif %}
-              {{ member.username }} - {{ member.department }} ({{ member.semester }})
+              {{ member.username }} - {{ member.department }} ({{ member.session }})
             </li>
           {% empty %}
             <li>No approved members yet.</li>
@@ -68,11 +68,11 @@
       {% else %}
         <span style="display: inline-block; width: 40px; height: 40px; background: #ccc; border-radius: 50%; text-align: center; line-height: 40px;">🧑</span>
       {% endif %}
-       {{ member.username }} - {{ member.department }} ({{ member.semester }})
+       {{ member.username }} - {{ member.department }} ({{ member.session }})
             </div>
               <form style="margin-top: 10px;" action="{% url 'approve_member' member.id %}" method="post" style="display:inline;">
         {% csrf_token %}
-        <button class="join_now" style="padding: 0; background: none; border-radius: 5px;
+        <button  class="join_now for_res" style="padding: 0; background: none; border-radius: 5px;
         padding: 3px 5px;" type="submit">Approve</button>
       </form>
 

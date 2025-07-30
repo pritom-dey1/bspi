@@ -37,13 +37,15 @@
    <div class="dropdown">
      <!-- Semester -->
      <div id="semester">
-          <label class="semester drop_text" for="id_semester">Semester</label>
+          <label class="semester drop_text" for="id_semester">SESSION</label>
     
-    {{ form.semester }}
-    {% if form.semester.errors %}
-        <div class="error">{{ form.semester.errors.0 }}</div>
-    {% endif %}
+    {{ form.session }}
+    {% if form.session.errors %}
+    <div class="error">{{ form.session.errors.0 }}</div>
+{% endif %}
      </div>
+
+
 
     <!-- Department -->
     <div id="department">
@@ -72,12 +74,12 @@
 
     <!-- Submit -->
     <button class="registation_button" style="width: 20%;" type="submit">Register</button>
-        <div class="error_box">
+        <div class="error_box" style="display: none;">
             {% if form.errors %}
     <p style="color:red;">Invalid login. Please try again.</p>
     {% endif %}
 
-    <p>have an account? <a  style="text-decoration: none; font-weight: 600; color:#028ec2;" href="{% url 'login' %}">LOGIN HERE</a></p>
+    <p style="text-transform: uppercase; text-align: center;  " class="p_res">have an account? <br><a  style="text-decoration: none; font-weight: 600; color:#028ec2;" href="{% url 'login' %}">LOGIN HERE</a></p>
 
     </div>
 </form>
