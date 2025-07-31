@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import ContactForm
 from django.views.decorators.http import require_POST
+from django.shortcuts import render
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.conf import settings  
@@ -18,7 +20,21 @@ from django.contrib import messages
 from .models import Person
 from .models import LeaderboardMember
 from .models import LearningMaterial
+from django.contrib.auth.views import LoginView
+from axes.helpers import get_client_ip_address
+from axes.handlers.proxy import AxesProxyHandler
+from django.contrib import messages
 
+class CustomLoginView(LoginView):
+    def dispatch(self, request, *args, **kwargs):
+        username = request.POST.get('username') if request.method == "POST" else None
+        credentials = {'username': username} if username else None
+        
+        locked = AxesProxyHandler.is_locked(request, credentials=credentials)
+        
+        if locked:
+            return render(request, 'blocked.html', status=403)
+        return super().dispatch(request, *args, **kwargs)
 
 def about_page(request):
         advisors = Person.objects.filter(role='advisor')

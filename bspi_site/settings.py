@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'core',
+    'axes',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -43,8 +44,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'axes.middleware.AxesMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', 
@@ -143,3 +146,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 LOGIN_REDIRECT_URL = '/redirect/'
 LOGIN_REDIRECT_URL = '/redirect/'  
 LOGOUT_REDIRECT_URL = '/login/'   
+
+
+AXES_FAILURE_LIMIT = 3  # 3 failed attempts
+AXES_COOLOFF_TIME = 24  # in hours
+AXES_LOCK_OUT_AT_FAILURE = True
+AXES_USE_USER_AGENT = True
+AXES_ONLY_USER_FAILURES = False  # Optional, only block based on username
