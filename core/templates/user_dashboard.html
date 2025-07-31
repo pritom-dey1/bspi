@@ -38,7 +38,29 @@
 
     <div class="dash_main" style="flex-direction: column; gap: 20px; display: flex;align-items: center;justify-content: center;">
      
-      <h2 style="text-align:center;">YOUR DASHBOARD WILL BE UPDATED SOON</h2>
+      {% if lessons %}
+  <div class="dashboard_lessons" style="margin-top: 40px;">
+    <h2 style="text-align: center;">Learning Materials for {{ request.user.wing }} Wing</h2>
+    <div class="lessons_grid" style="display: flex; flex-wrap: wrap;align-items: center; justify-content: center;
+    margin-top: 30px; gap: 20px; ">
+
+      {% for lesson in lessons %}
+        <div class="lesson_card" style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; width: 300px;">
+          <img src="{{ lesson.image.url }}" alt="{{ lesson.title }}" style="width: 100%;aspect-ratio: 4/3; border-radius: 5px;">
+          <h3 style="font-family: poppins; font-weight: 500;  margin-top: 10px;">{{ lesson.title }}</h3>
+          {% if lesson.content_link %}
+            <a href="{{ lesson.content_link }}" target="_blank" style="display: inline-block; margin-top: 8px; color: white; background-color: #1cacff; padding: 6px 12px; border-radius: 5px; text-decoration: none;">View Material</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+{% else %}
+  <p style="text-align: center; margin-top: 40px; color: gray;">
+    No learning materials available for your wing yet.
+  </p>
+{% endif %}
              <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit" class="join_now" style=" background: none; border-radius: 5px;

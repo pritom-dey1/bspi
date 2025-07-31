@@ -2024,7 +2024,7 @@ line-height: 70px;
 .footer_bottom{
   flex-direction: column;
 }
-.club_overeview h1{
+ .club_overeview h1{
 text-align: center;
 }
 .vision_mision{
@@ -2036,6 +2036,7 @@ text-align: center;
   width: 100%;
 }
 .wing_show{
+  padding-top: 850px;
 width: 100%;
 }
 .wing_card{
@@ -2057,8 +2058,17 @@ width: 100%;
   display: none;
 }
 .profile{
+  display: flex;
+  gap: 20px;
   width: 90%;
 }
+.profile img{
+  width: 40% !important;
+  object-fit: cover;
+
+ 
+}
+
 .social_icon_for_member a,i{
   font-size: 30px;
   color: #fff;
@@ -2075,6 +2085,9 @@ width: 100%;
   font-family: poppins;
   text-transform: uppercase;
   font-weight: 600;
+} 
+.club_member{
+  padding-top: 800px;
 }
 .footer_bottom{
   margin-top: 20px;
@@ -2088,6 +2101,7 @@ width: 100%;
   height: auto;
   padding: 150px 0;
 }
+
 .announcement_warper{
   width: 90% !important; 
 }
@@ -2282,6 +2296,9 @@ width: 100%;
 }
 .learing_banner h2{
   font-size: 1.3rem !important;
+}
+.profile h3{
+  font-size: 16px;
 }
 }
 .wing_show{

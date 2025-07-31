@@ -110,8 +110,9 @@
    
     </div>
      
- 
-<div class="club_member">
+</div>
+
+<div class="club_member " style="color: #fff;">
     <div class="advisor">
         <h2 class="section-title">Advisory</h2>
     <div class="member_container">
@@ -119,12 +120,14 @@
         
             <div class="profile">
                 <img src="{{ person.image.url }}" alt="{{ person.name }}">
-                <h3>{{ person.name }}</h3>
-                <p>{{ person.position }}</p>
+                <div class="for_res_pro">
+                    <h3>{{ person.name }}</h3>
+                <p style="text-transform: uppercase;">{{ person.position }}</p>
                 <div class="social_icon_for_member">
                     {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank"><i class="ri-linkedin-box-fill"></i></a> {% endif %}
                     {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank"><i class="ri-facebook-circle-fill"></i></a> {% endif %}
                     {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank"><i class="ri-twitter-fill"></i></a> {% endif %}
+                </div>
                 </div>
             </div>
         {% endfor %}
@@ -137,15 +140,17 @@
             {% for person in executives %}
                 <div class="profile">
                     <img src="{{ person.image.url }}" alt="{{ person.name }}">
-                    <h3>{{ person.name }}</h3>
-                    <h4 style="font-weight: 400; font-family: poppins;">{{person.bio}}</h4>
-                    <p>{{ person.position }}</p>
-                    <div class="social_icon_for_member">
-                        {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank"><i class="ri-linkedin-box-fill"></i></a> {% endif %}
-                        {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank"><i class="ri-facebook-circle-fill"></i></a> {% endif %}
-                        {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank"><i class="ri-twitter-fill"></i></a> {% endif %}
+
+                    <div class="for_res_pro">
+                        <h3>{{ person.name }}</h3>
+                        <h4 style="font-weight: 400; font-family: poppins;">{{person.bio}}</h4>
+                        <p style="text-transform: uppercase;">{{ person.position }}</p>
+                        <div class="social_icon_for_member">
+                            {% if person.linkedin %}<a href="{{ person.linkedin }}" target="_blank"><i class="ri-linkedin-box-fill"></i></a> {% endif %}
+                            {% if person.facebook %}<a href="{{ person.facebook }}" target="_blank"><i class="ri-facebook-circle-fill"></i></a> {% endif %}
+                            {% if person.twitter %}<a href="{{ person.twitter }}" target="_blank"><i class="ri-twitter-fill"></i></a> {% endif %}
+                        </div>
                     </div>
-            
            </div>
            {% endfor %}
         </div>
@@ -178,5 +183,4 @@
     {% endfor %}
 </div> -->
 
-</div>
 {% endblock %}

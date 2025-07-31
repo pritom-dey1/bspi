@@ -194,8 +194,11 @@ def approve_member(request, user_id):
     return redirect('leader_dashboard')
 @login_required
 def user_dashboard(request):
-    return render(request, 'user_dashboard.html')
-
+    user_wing = request.user.wing
+    lessons = LearningMaterial.objects.filter(wing=user_wing)
+    return render(request, 'user_dashboard.html', {
+        'lessons': lessons
+    })
 
 @login_required
 def learning_page(request):
