@@ -24,7 +24,11 @@ from django.contrib.auth.views import LoginView
 from axes.helpers import get_client_ip_address
 from axes.handlers.proxy import AxesProxyHandler
 from django.contrib import messages
-
+import bleach
+def clean_input(text):
+    allowed_tags = []  # kono tag allow korben na
+    allowed_attrs = {}
+    return bleach.clean(text, tags=allowed_tags, attributes=allowed_attrs, strip=True)
 class CustomLoginView(LoginView):
     def dispatch(self, request, *args, **kwargs):
         username = request.POST.get('username') if request.method == "POST" else None

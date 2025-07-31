@@ -31,73 +31,7 @@ cards.forEach(card => {
   });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("contact-form");
-  const successMessage = document.getElementById("success-message");
-  const errorMessage = document.getElementById("error-message");
-  const submitButton = document.getElementById("submit-button");
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    let isMalicious = false;
-
-    for (let [key, value] of formData.entries()) {
-      if (typeof value === 'string' && /<script.*?>.*?<\/script>/gi.test(value)) {
-        isMalicious = true;
-        break;
-      }
-    }
-
-    if (isMalicious) {
-      errorMessage.innerHTML = "Don't do this brother 😡";
-      errorMessage.style.display = "block";
-      successMessage.style.display = "none";
-      submitButton.textContent = "Send Message";
-      return;
-    }
-
-    const originalText = submitButton.textContent;
-    submitButton.textContent = "Sending...";
-
-    fetch("", {
-      method: "POST",
-      headers: {
-        "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        successMessage.textContent = data.message;
-        successMessage.style.display = "block";
-        errorMessage.style.display = "none";
-        form.reset();
-        submitButton.textContent = "Sended ✅";
-      } else {
-        errorMessage.innerHTML = '';
-        for (const field in data.errors) {
-          errorMessage.innerHTML += `${field}: ${data.errors[field].join(', ')}<br>`;
-        }
-        errorMessage.style.display = "block";
-        successMessage.style.display = "none";
-        submitButton.textContent = "Sorry ❌";
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      submitButton.textContent = "Sorry ❌";
-    })
-    .finally(() => {
-      setTimeout(() => {
-        submitButton.textContent = originalText;
-      }, 3000);
-    });
-  });
-});
 gsap.registerPlugin(ScrollTrigger);
 
 // Using Locomotive Scroll from Locomotive https://github.com/locomotivemtl/locomotive-scroll
@@ -306,3 +240,71 @@ document.onkeydown = function(e) {
     return false;
   }
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("contact-form");
+  const successMessage = document.getElementById("success-message");
+  const errorMessage = document.getElementById("error-message");
+  const submitButton = document.getElementById("submit-button");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    let isMalicious = false;
+
+    for (let [key, value] of formData.entries()) {
+      if (typeof value === 'string' && /<script.*?>.*?<\/script>/gi.test(value)) {
+        isMalicious = true;
+        break;
+      }
+    }
+
+    if (isMalicious) {
+      errorMessage.innerHTML = "Don't do this brother 😡";
+      errorMessage.style.display = "block";
+      successMessage.style.display = "none";
+      submitButton.textContent = "Send Message";
+      return;
+    }
+
+    const originalText = submitButton.textContent;
+    submitButton.textContent = "Sending...";
+
+    fetch("", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        successMessage.textContent = data.message;
+        successMessage.style.display = "block";
+        errorMessage.style.display = "none";
+        form.reset();
+        submitButton.textContent = "Sended ✅";
+      } else {
+        errorMessage.innerHTML = '';
+        for (const field in data.errors) {
+          errorMessage.innerHTML += `${field}: ${data.errors[field].join(', ')}<br>`;
+        }
+        errorMessage.style.display = "block";
+        successMessage.style.display = "none";
+        submitButton.textContent = "Sorry ❌";
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      submitButton.textContent = "Sorry ❌";
+    })
+    .finally(() => {
+      setTimeout(() => {
+        submitButton.textContent = originalText;
+      }, 3000);
+    });
+  });
+});
