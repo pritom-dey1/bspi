@@ -93,8 +93,7 @@ def get_posts(request):
             ]
         })
     return JsonResponse({'posts': posts_data})
-def help_section(request):
-    return render(request, 'help_section.html')
+
 def clean_input(text):
     allowed_tags = []  # kono tag allow korben na
     allowed_attrs = {}
