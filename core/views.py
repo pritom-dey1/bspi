@@ -61,20 +61,26 @@ def create_post(request):
 
         return JsonResponse({'message': 'Post created', 'post_id': post.id}, status=201)
 
-@csrf_exempt
+@require_POST
+@login_required
 def create_comment(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        content = data.get('content')
-        post_id = data.get('post_id')
-        user = request.user
+    content = request.POST.get('content')
+    post_id = request.POST.get('post_id')
 
-        if not user.is_authenticated:
-            return JsonResponse({'error': 'Not logged in'}, status=401)
+    if not post_id or not content:
+        return JsonResponse({'error': 'Missing post ID or content.'}, status=400)
 
-        post = HelpPost.objects.get(id=post_id)
-        Comment.objects.create(user=user, post=post, content=content)
-        return JsonResponse({'message': 'Comment added'}, status=201)
+    post = get_object_or_404(HelpPost, id=post_id)
+
+    Comment.objects.create(
+        user=request.user,
+        post=post,
+        content=content
+    )
+
+    # You can choose between JsonResponse or redirect based on your need:
+    # return JsonResponse({'message': 'Comment added!'}, status=201)
+    return redirect('help_section')  # 🔁 redirect after successful comment
 
 def get_posts(request):
     posts_data = []
