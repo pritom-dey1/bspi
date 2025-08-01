@@ -7,9 +7,14 @@ from . import views
 from .views import CustomLoginView
 
 urlpatterns = [
+    path('help/', views.help_section, name='help_section'),
     path('', views.home, name='home'),
+    path('help/create/', views.create_help_post, name='create_help_post'),
     path('login/', CustomLoginView.as_view(template_name='login.html'), name='login'),
     path('about/',views.about_page,name='about'),
+    path('api/create_post/', views.create_post, name='create_post'),
+    path('api/create_comment/', views.create_comment, name='create_comment'),
+    path('api/get_posts/', views.get_posts, name='get_posts'),
     path('learning/', views.learning_page, name='learning'),
     path('go-to-learning/', views.redirect_learning, name='go_to_learning'),
     path('announcement/<int:id>/', views.announcement_detail, name='announcement_detail'),

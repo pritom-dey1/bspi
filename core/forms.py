@@ -1,7 +1,12 @@
 from django import forms
 from .models import ContactMessage
 from .models import CustomUser
+from .models import HelpPost
 
+class HelpPostForm(forms.ModelForm):
+    class Meta:
+        model = HelpPost
+        fields = ['title', 'content', 'image']
 
 class ContactForm(forms.ModelForm):
     class Meta:

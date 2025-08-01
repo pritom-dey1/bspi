@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}
+Help & Discussion
+{% endblock %}
+{% block content %}
+<div class="help_banner">
+    <h2>Create a New Help Post</h2>
+</div>
+<div class="login_from" style="padding: 60px 0;"> 
+    <h2 style="text-align: center; color: #fff; font-size: 2rem; font-weight: 500; text-transform: uppercase;margin-bottom: 50px;"> Post here</h2>
+    <div class="login_from_warper">
+        <div class="login_box">
+
+            <form class="login-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input style="margin: 0%;" type="text" name="title" placeholder="Title" required><br><br>
+                <textarea style="margin: 0%;" name="content" placeholder="Describe your issue..." required></textarea><br><br>
+                <input style="margin-top: -20px;" type="file" name="image"><br><br>
+                <button style="margin-top: -20px;" class="join_now type="submit">Submit</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

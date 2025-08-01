@@ -149,7 +149,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 
 AXES_FAILURE_LIMIT = 3  # 3 failed attempts
-AXES_COOLOFF_TIME = 24  # in hours
+AXES_COOLOFF_TIME = 6  # in hours
 AXES_LOCK_OUT_AT_FAILURE = True
 AXES_USE_USER_AGENT = True
 AXES_ONLY_USER_FAILURES = False  # Optional, only block based on username

@@ -234,12 +234,12 @@ closeMenu.onclick = () => {
 
 
 // security site 
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.onkeydown = function(e) {
-  if (e.key == "F12" || (e.ctrlKey && e.shiftKey && e.key == "I")) {
-    return false;
-  }
-};
+// document.addEventListener('contextmenu', e => e.preventDefault());
+// document.onkeydown = function(e) {
+//   if (e.key == "F12" || (e.ctrlKey && e.shiftKey && e.key == "I")) {
+//     return false;
+//   }
+// };
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contact-form");

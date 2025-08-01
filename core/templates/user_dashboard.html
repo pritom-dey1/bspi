@@ -21,10 +21,16 @@
       <div class="dash_top_right">
         <h2>Welcome, {{ request.user.username }} (Member)</h2>
         <div class="details">
-          <div class="details_top">
+          <div class="details_top" style="flex-direction: column;">
+            <div class="de_top" style="display: flex;align-items: center;justify-content: center;">
+              <a style="text-decoration: none; text-transform: uppercase;color: #1cacff; font-weight: 600;" href="{% url 'create_help_post' %}">Create New Help Post</a>
+
+            </div>
+           <div class="de_bot" style="display: flex;align-items: center;justify-content: center; gap: 20px; ">
             <p>Department: <span style="color: #1cacff; font-weight: 600;">{{ request.user.department }}</span></p>
             <p>Session: <span style="color: #1cacff; font-weight: 600;">{{ request.user.session }}</span></p>
             <p>Wing: <span style="color: #1cacff; font-weight: 600;">{{ request.user.wing }}</span></p>
+           </div>
           </div>
           <!-- Optional Stats (Uncomment if needed)
           <div class="details_bottom">
