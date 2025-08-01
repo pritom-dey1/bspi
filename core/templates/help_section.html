@@ -6,145 +6,74 @@ Help & Discussion
 <div class="help_banner">
     <h2>Help & Discussion</h2>
 </div>
+
 <div class="help_section_warper">
     <div class="help_section_container">
-        <div id="posts-container"></div>
+
+        {% for post in posts %}
+        <div class="post_box">
+            <h3>{{ post.title }}</h3>
+
+            {% with post.content|truncatewords:10 as short_content %}
+                <p id="short-content-{{ post.id }}">
+                    {{ short_content }}...
+                    <a style="text-decoration:none ;color:#00c6ff;" href="javascript:void(0);" onclick="toggleContent({{ post.id }}, true)">See More</a>
+                </p>
+                <p id="full-content-{{ post.id }}" style="display: none;">
+                    {{ post.content }}
+                    <a style="text-decoration:none ;color:#00c6ff;" href="javascript:void(0);" onclick="toggleContent({{ post.id }}, false)">See Less</a>
+                </p>
+            {% endwith %}
+
+            {% if post.image %}
+                <img class="img_post" src="{{ post.image.url }}" style="max-width:100%; height:auto; border-radius:5px;"><br>
+            {% endif %}
+            <small>Posted by {{ post.user.username }} at {{ post.created_at }}</small>
+
+            <div style="margin-top: 10px;">
+                <button onclick="toggleComments({{ post.id }})" id="toggle-comments-{{ post.id }}">Show Comments</button>
+                <div id="comments-{{ post.id }}" style="display: none; margin-top: 10px;">
+                    <h4>Comments:</h4>
+                    {% for comment in post.comments.all %}
+                        <p><b>{{ comment.user.username }}:</b> {{ comment.content }}</p>
+                    {% empty %}
+                        <p>No comments yet.</p>
+                    {% endfor %}
+                    <form method="POST" action="{% url 'create_comment' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <input type="text" name="content" placeholder="Comment..." required>
+                        <button type="submit">Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
 
     </div>
-    <!-- New Post Form -->
-
-
-
-<!-- Posts Display Area -->
-<script>
-    function truncateWords(text, numWords) {
-        const words = text.trim().split(/\s+/);
-        if (words.length <= numWords) return text;
-        return words.slice(0, numWords).join(' ') + '...';
-    }
-    
-    function loadPosts() {
-        fetch('/api/get_posts/')
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById('posts-container');
-            container.innerHTML = '';
-            data.posts.forEach(post => {
-                const shortContent = truncateWords(post.content, 10);
-                const fullContentId = `full-content-${post.id}`;
-                const shortContentId = `short-content-${post.id}`;
-                const commentSectionId = `comments-${post.id}`;
-                const toggleButtonId = `toggle-comments-${post.id}`;
-    
-                let postHTML = `
-                    <div class="post_box">
-                        <h3>${post.title}</h3>
-    
-                        <p id="${shortContentId}">
-                            ${shortContent}
-                            <a style="text-decoration:none ;color:#00c6ff;" href="javascript:void(0);" onclick="toggleContent(${post.id}, true)">See More</a>
-                        </p>
-    
-                        <p id="${fullContentId}" style="display: none;">
-                            ${post.content}
-                            <a style="text-decoration:none ;color:#00c6ff;" href="javascript:void(0);" onclick="toggleContent(${post.id}, false)">See Less</a>
-                        </p>
-    
-                        ${post.image_url ? `<img src="${post.image_url}" style="max-width:100%; height:auto; border-radius:5px;"><br>` : ''}
-                        <small>Posted by ... at ${post.created_at}</small>
-    
-                        <div style="margin-top: 10px;">
-                            <button onclick="toggleComments(${post.id})" id="${toggleButtonId}">Show Comments</button>
-                            <div id="${commentSectionId}" style="display: none; margin-top: 10px;">
-                                <h4>Comments:</h4>
-                                ${post.comments.map(c => `<p><b>${c.user}:</b> ${c.content}</p>`).join('')}
-                                <input type="text" placeholder="Comment..." id="comment-${post.id}">
-                                <button onclick="submitComment(${post.id})">Comment</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += postHTML;
-            });
-        });
-    }
-    
-    function toggleContent(postId, showFull) {
-        const shortEl = document.getElementById(`short-content-${postId}`);
-        const fullEl = document.getElementById(`full-content-${postId}`);
-        if (showFull) {
-            shortEl.style.display = 'none';
-            fullEl.style.display = 'block';
-        } else {
-            fullEl.style.display = 'none';
-            shortEl.style.display = 'block';
-        }
-    }
-    
-    function toggleComments(postId) {
-        const section = document.getElementById(`comments-${postId}`);
-        const button = document.getElementById(`toggle-comments-${postId}`);
-        const isVisible = section.style.display === 'block';
-    
-        section.style.display = isVisible ? 'none' : 'block';
-        button.textContent = isVisible ? 'Show Comments' : 'Hide Comments';
-    }
-    
-    function submitPost() {
-        const title = document.getElementById('post-title').value;
-        const content = document.getElementById('post-content').value;
-        const image = document.getElementById('post-image').files[0];
-    
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        if (image) {
-            formData.append('image', image);
-        }
-    
-        fetch('/api/create_post/', {
-            method: 'POST',
-            body: formData,
-            credentials: 'same-origin'
-        })
-        .then(res => res.json())
-        .then(() => {
-            loadPosts();
-            document.getElementById('post-title').value = '';
-            document.getElementById('post-content').value = '';
-            document.getElementById('post-image').value = '';
-        });
-    }
-    
-    function submitComment(postId) {
-        const inputEl = document.getElementById(`comment-${postId}`);
-        const content = inputEl.value.trim();
-    
-        if (!content) {
-            alert("Comment cannot be empty!");
-            return;
-        }
-    
-        fetch('/api/create_comment/', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({post_id: postId, content})
-        })
-        .then(res => res.json())
-        .then(() => {
-            inputEl.value = ''; // clear the comment box
-            loadPosts();
-        });
-    }
-    
-    // Load posts on page load
-    loadPosts();
-    </script>
-    
-
 </div>
+
+<!-- Content Toggle Script (unchanged) -->
+<script>
+function toggleContent(postId, showFull) {
+    const shortEl = document.getElementById(`short-content-${postId}`);
+    const fullEl = document.getElementById(`full-content-${postId}`);
+    if (showFull) {
+        shortEl.style.display = 'none';
+        fullEl.style.display = 'block';
+    } else {
+        fullEl.style.display = 'none';
+        shortEl.style.display = 'block';
+    }
+}
+
+function toggleComments(postId) {
+    const section = document.getElementById(`comments-${postId}`);
+    const button = document.getElementById(`toggle-comments-${postId}`);
+    const isVisible = section.style.display === 'block';
+
+    section.style.display = isVisible ? 'none' : 'block';
+    button.textContent = isVisible ? 'Show Comments' : 'Hide Comments';
+}
+</script>
 {% endblock %}
-
-
-
-

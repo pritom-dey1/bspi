@@ -1464,6 +1464,7 @@ background: linear-gradient(90deg, #0072ff, #0292b9);
   background-color: #ffffff31;
   padding: 30px;
   border-radius: 10px;
+  width: 100%;
   border: 1px solid #fff;
 }
 .post_box h3{
@@ -1923,9 +1924,14 @@ color: #fff;
   text-transform: uppercase;
   color: #fff;
 
-  background-position: center;
-  background-size: cover;
+
   background: url('../img/login.jpg') no-repeat;
+    background-position: center;
+  background-size: cover;
+}
+.img_post{
+  width: 100%;
+  object-fit: cover;
 }
 .help_banner h2{
   font-size: 2.7rem;
@@ -1941,7 +1947,7 @@ color: #fff;
  
 }
 .help_section_container{
-  width: 95%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
