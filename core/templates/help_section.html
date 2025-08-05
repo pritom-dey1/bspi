@@ -36,8 +36,8 @@ Help & Discussion
                     <h4>Comments:</h4>
                     {% for comment in post.comments.all %}
                         <p><b>{{ comment.user.username }}:</b> {{ comment.content }}</p>
-                    {% empty %}
-                        <p>No comments yet.</p>
+                        {% empty %}
+                        <p class="no-comments">No comments yet.</p>
                     {% endfor %}
                     <form method="POST" action="{% url 'create_comment' %}" class="comment-form" data-post-id="{{ post.id }}">
                         {% csrf_token %}
@@ -55,68 +55,79 @@ Help & Discussion
 
 <!-- Content Toggle Script (unchanged) -->
 <script>
-function toggleContent(postId, showFull) {
-    const shortEl = document.getElementById(`short-content-${postId}`);
-    const fullEl = document.getElementById(`full-content-${postId}`);
-    if (showFull) {
-        shortEl.style.display = 'none';
-        fullEl.style.display = 'block';
-    } else {
-        fullEl.style.display = 'none';
-        shortEl.style.display = 'block';
-    }
-}
-
-function toggleComments(postId) {
-    const section = document.getElementById(`comments-${postId}`);
-    const button = document.getElementById(`toggle-comments-${postId}`);
-    const isVisible = section.style.display === 'block';
-
-    section.style.display = isVisible ? 'none' : 'block';
-    button.textContent = isVisible ? 'Show Comments' : 'Hide Comments';
-}
-document.querySelectorAll('.comment-form').forEach(form => {
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const postId = this.dataset.postId;
-        const contentInput = this.querySelector('input[name="content"]');
-        const content = contentInput.value.trim();
-        const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
-
-        if (content === '') {
-            alert("❌ Comment cannot be empty.");
-            return;
+    function toggleContent(postId, showFull) {
+        const shortEl = document.getElementById(`short-content-${postId}`);
+        const fullEl = document.getElementById(`full-content-${postId}`);
+        if (showFull) {
+            shortEl.style.display = 'none';
+            fullEl.style.display = 'block';
+        } else {
+            fullEl.style.display = 'none';
+            shortEl.style.display = 'block';
         }
-
-        const formData = new FormData();
-        formData.append('post_id', postId);
-        formData.append('content', content);
-
-        fetch("{% url 'create_comment' %}", {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken': csrfToken
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert("❌ " + data.error);
-            } else {
-                const commentsDiv = document.getElementById(`comments-${postId}`);
-                const newCommentHTML = `<p><b>${data.username}:</b> ${data.content}</p>`;
-                commentsDiv.insertAdjacentHTML('beforeend', newCommentHTML);
-                contentInput.value = '';
+    }
+    
+    function toggleComments(postId) {
+        const section = document.getElementById(`comments-${postId}`);
+        const button = document.getElementById(`toggle-comments-${postId}`);
+        const isVisible = section.style.display === 'block';
+    
+        section.style.display = isVisible ? 'none' : 'block';
+        button.textContent = isVisible ? 'Show Comments' : 'Hide Comments';
+    }
+    
+    // 💬 AJAX comment submit
+    document.querySelectorAll('.comment-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+    
+            const postId = this.dataset.postId;
+            const contentInput = this.querySelector('input[name="content"]');
+            const content = contentInput.value.trim();
+            const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+            if (content === '') {
+                alert("❌ Comment cannot be empty.");
+                return;
             }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("⚠️ Something went wrong.");
+    
+            const formData = new FormData();
+            formData.append('post_id', postId);
+            formData.append('content', content);
+    
+            fetch("{% url 'create_comment' %}", {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => {
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        console.error("Error Response:", data);
+                        alert("❌ " + (data.error || "Something went wrong."));
+                        return;
+                    }
+    
+                    const commentsDiv = document.getElementById(`comments-${postId}`);
+                    const noCommentsParagraph = commentsDiv.querySelector('.no-comments');
+                    if (noCommentsParagraph) {
+                        noCommentsParagraph.remove();
+                    }
+    
+                    const newCommentHTML = `<p><b>${data.username}:</b> ${data.content}</p>`;
+                    commentsDiv.insertAdjacentHTML('afterbegin', newCommentHTML);
+                    contentInput.value = '';
+                });
+            })
+            .catch(error => {
+                console.error("AJAX Fetch Failed:", error);
+                alert("⚠️ Something went wrong while submitting your comment.");
+            });
         });
     });
-});
-</script>
+    </script>
+    
 {% endblock %}

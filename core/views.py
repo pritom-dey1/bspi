@@ -64,12 +64,15 @@ def create_post(request):
 @require_POST
 @login_required
 def create_comment(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        post_id = request.POST.get('post_id')
+    try:
         content = request.POST.get('content', '').strip()
+        post_id = request.POST.get('post_id')
 
         if not post_id or not content:
-            return JsonResponse({'error': 'Missing post ID or content.'}, status=400)
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'error': 'Missing post ID or content.'}, status=400)
+            else:
+                return redirect('help_section')
 
         post = get_object_or_404(HelpPost, id=post_id)
 
@@ -79,12 +82,20 @@ def create_comment(request):
             content=content
         )
 
-        return JsonResponse({
-            'username': request.user.username,
-            'content': comment.content
-        }, status=201)
+        # AJAX response
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'username': request.user.username,
+                'content': comment.content
+            }, status=201)
+
+        return redirect('help_section')
     
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    except Exception as e:
+        print("Error in create_comment:", str(e))  # for debugging
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Server error'}, status=500)
+        return redirect('help_section')
 
 def get_posts(request):
     posts_data = []
