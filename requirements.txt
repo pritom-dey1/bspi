@@ -18,6 +18,7 @@ django-sitemaps
 # Static files and compression
 whitenoise>=6.6.0           
 django-compressor>=4.4       
+jazzmin>=2.6.0
 
 # Forms and widgets
 django-crispy-forms>=2.1     
