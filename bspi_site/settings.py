@@ -28,11 +28,28 @@ SECRET_KEY = 'django-insecure-@vc83nshs%-cw*fh4#$=s5__s+eal5qg96d($+#2m30()7hu90
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+JAZZMIN_SETTINGS = {
+    "site_title": "BSPI Admin",
+    "site_header": "BSPI Computer Club Admin",
+    "welcome_sign": "Welcome Leader/Admin!",
+    "copyright": "BSPI",
+    "topmenu_links": [
+        {"name": "Home",  "url": "/", "permissions": ["auth.view_user"]},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth": "fas fa-user-shield",
+        "axes": "fas fa-shield-alt",
+        "core.Event": "fas fa-calendar-alt",
+        "core.Announcement": "fas fa-bullhorn",
+    }
+}
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'core',
