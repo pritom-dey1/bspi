@@ -1461,7 +1461,7 @@ background: linear-gradient(90deg, #0072ff, #0292b9);
   background-color: #00c6ff;
 }
 .post_box{
-  background-color: #ffffff31;
+  background-color: #ffffff13;
   padding: 30px;
   border-radius: 10px;
   width: 100%;
@@ -2442,6 +2442,14 @@ width: 100%;
 }
 .profile h3{
   font-size: 16px;
+}
+.post_box h3{
+  font-size: 16px;
+  width: 100%;
+
+}
+.des_mar_top{
+  margin-bottom: 40px !important;
 }
 }
 .wing_show{

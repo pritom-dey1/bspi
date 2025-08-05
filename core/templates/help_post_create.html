@@ -14,7 +14,7 @@ Help & Discussion
             <form class="login-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input style="margin: 0%;" type="text" name="title" placeholder="Title" required><br><br>
-                <textarea style="margin: 0%;" name="content" placeholder="Describe your issue..." required></textarea><br><br>
+                <textarea class="des_mar_top" style="margin: 0%;" name="content" placeholder="Describe your issue..." required></textarea><br><br>
                 <input style="margin-top: -20px;" type="file" name="image"><br><br>
                 <button style="margin-top: -20px;" class="join_now type="submit">Submit</button>
             </form>

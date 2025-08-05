@@ -28,7 +28,7 @@ Help & Discussion
             {% if post.image %}
                 <img class="img_post" src="{{ post.image.url }}" style="max-width:100%; height:auto; border-radius:5px;"><br>
             {% endif %}
-            <small>Posted by {{ post.user.username }} at {{ post.created_at }}</small>
+            <small style="font-family: poppins;">Posted by Member at {{ post.created_at }}</small>
 
             <div style="margin-top: 10px;">
                 <button onclick="toggleComments({{ post.id }})" id="toggle-comments-{{ post.id }}">Show Comments</button>
@@ -39,7 +39,7 @@ Help & Discussion
                     {% empty %}
                         <p>No comments yet.</p>
                     {% endfor %}
-                    <form method="POST" action="{% url 'create_comment' %}">
+                    <form method="POST" action="{% url 'create_comment' %}" class="comment-form" data-post-id="{{ post.id }}">
                         {% csrf_token %}
                         <input type="hidden" name="post_id" value="{{ post.id }}">
                         <input type="text" name="content" placeholder="Comment..." required>
@@ -75,5 +75,48 @@ function toggleComments(postId) {
     section.style.display = isVisible ? 'none' : 'block';
     button.textContent = isVisible ? 'Show Comments' : 'Hide Comments';
 }
+document.querySelectorAll('.comment-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const postId = this.dataset.postId;
+        const contentInput = this.querySelector('input[name="content"]');
+        const content = contentInput.value.trim();
+        const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        if (content === '') {
+            alert("❌ Comment cannot be empty.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('post_id', postId);
+        formData.append('content', content);
+
+        fetch("{% url 'create_comment' %}", {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrfToken
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("❌ " + data.error);
+            } else {
+                const commentsDiv = document.getElementById(`comments-${postId}`);
+                const newCommentHTML = `<p><b>${data.username}:</b> ${data.content}</p>`;
+                commentsDiv.insertAdjacentHTML('beforeend', newCommentHTML);
+                contentInput.value = '';
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("⚠️ Something went wrong.");
+        });
+    });
+});
 </script>
 {% endblock %}

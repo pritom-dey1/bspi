@@ -48,7 +48,7 @@ def help_section(request):
 
 @csrf_exempt
 def create_post(request):
-    if request.method == 'POST':
+    if request.method == 'POST':    
         title = request.POST.get('title')
         content = request.POST.get('content')
         image = request.FILES.get('image')
@@ -64,23 +64,27 @@ def create_post(request):
 @require_POST
 @login_required
 def create_comment(request):
-    content = request.POST.get('content')
-    post_id = request.POST.get('post_id')
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        post_id = request.POST.get('post_id')
+        content = request.POST.get('content', '').strip()
 
-    if not post_id or not content:
-        return JsonResponse({'error': 'Missing post ID or content.'}, status=400)
+        if not post_id or not content:
+            return JsonResponse({'error': 'Missing post ID or content.'}, status=400)
 
-    post = get_object_or_404(HelpPost, id=post_id)
+        post = get_object_or_404(HelpPost, id=post_id)
 
-    Comment.objects.create(
-        user=request.user,
-        post=post,
-        content=content
-    )
+        comment = Comment.objects.create(
+            user=request.user,
+            post=post,
+            content=content
+        )
 
-    # You can choose between JsonResponse or redirect based on your need:
-    # return JsonResponse({'message': 'Comment added!'}, status=201)
-    return redirect('help_section')  # 🔁 redirect after successful comment
+        return JsonResponse({
+            'username': request.user.username,
+            'content': comment.content
+        }, status=201)
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 def get_posts(request):
     posts_data = []
