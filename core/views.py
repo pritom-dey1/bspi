@@ -31,6 +31,12 @@ from .models import HelpPost, Comment
 from .forms import HelpPostForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
 @login_required
 def help_section(request):
     if request.method == 'POST':

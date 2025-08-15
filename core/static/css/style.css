@@ -2464,3 +2464,52 @@ width: 100%;
 .moments-gallery img{
   aspect-ratio: 4/3 ;
 }
+
+.bot{
+  width: fit-content;
+  padding: 7px 16px;
+  max-width: 70%;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.288);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);  color: #efe6e6;
+  transition: 0.5s;
+}
+
+.user{
+  width: fit-content;
+  padding: 7px 16px;
+  left: 100%;
+  transform: translateX(-100%);
+  position: relative;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.288);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);  color: #efe6e6;
+  transition: 0.5s;
+  margin: 10px 0;
+}
+.chat_box{
+  width: 75%;
+  padding: 20px 25px !important;
+  position: relative;
+  border-radius: 8px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.034);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);  color: #efe6e6;
+  transition: 0.5s;
+  margin: 0 auto;
+}
+.chat_banner{
+  padding: 150px 0;
+  background: url("../img/login.jpg") no-repeat;
+  background-position: center ;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-family: poppins;
+
+  justify-content: center;
+}
