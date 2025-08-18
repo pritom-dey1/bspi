@@ -247,6 +247,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const errorMessage = document.getElementById("error-message");
   const submitButton = document.getElementById("submit-button");
 
+  // Function to escape HTML special characters
+  function escapeHTML(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -254,9 +265,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let isMalicious = false;
 
     for (let [key, value] of formData.entries()) {
-      if (typeof value === 'string' && /<script.*?>.*?<\/script>/gi.test(value)) {
-        isMalicious = true;
-        break;
+      if (typeof value === 'string') {
+        // Check for <script> tags
+        if (/<script.*?>.*?<\/script>/gi.test(value)) {
+          isMalicious = true;
+          break;
+        }
+        // Escape HTML special characters
+        formData.set(key, escapeHTML(value));
       }
     }
 

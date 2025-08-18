@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Announcement, ContactMessage, Event, EventMomentImage, CustomUser, Person, LeaderboardMember, LearningMaterial, HelpPost, Comment
 from django.contrib.auth.admin import UserAdmin
-
+from .forms import CustomUserCreationForm
 # --- existing admin classes ---
 
 @admin.register(LearningMaterial)
@@ -31,32 +31,22 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     search_fields = ('name', 'email', 'message')
 
+
 class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
     model = CustomUser
 
-    list_display = (
-        'username', 'email', 'first_name', 'last_name',
-        'session', 'department', 'wing',
-        'is_email_verified', 'is_leader', 'last_login', 'is_staff'
-    )
-    list_filter = (
-        'session', 'department', 'wing', 'is_email_verified', 'is_leader', 'is_staff'
-    )
+    list_display = ('username', 'email', 'is_leader', 'is_staff')
+    list_filter = ('session', 'department', 'wing', 'is_leader', 'is_staff')
+
     fieldsets = UserAdmin.fieldsets + (
-        (None, {
-            'fields': (
-                'session', 'department', 'wing',
-                'is_email_verified', 'verification_code',
-                'is_leader', 'profile_pic'
-            )
-        }),
+        (None, {'fields': ('session', 'department', 'wing', 'is_leader', 'profile_pic')}),
     )
-    add_fieldsets = UserAdmin.add_fieldsets + (
+
+    add_fieldsets = (
         (None, {
-            'fields': (
-                'session', 'department', 'wing',
-                'is_leader', 'profile_pic'
-            )
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2', 'session', 'department', 'wing', 'is_leader', 'profile_pic')
         }),
     )
 
