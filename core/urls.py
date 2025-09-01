@@ -10,7 +10,7 @@ urlpatterns = [
     path('help/', views.help_section, name='help_section'),
     path('', views.home, name='home'),
     path('create-comment/', views.create_comment, name='create_comment'),
-    
+    path('quiz/<int:lesson_id>/', views.quiz_page, name='quiz_page'),
     path('help/create/', views.create_help_post, name='create_help_post'),
     path('login/', CustomLoginView.as_view(template_name='login.html'), name='login'),
     path('about/',views.about_page,name='about'),

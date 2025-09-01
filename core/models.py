@@ -144,3 +144,37 @@ class LearningMaterial(models.Model):
 
     def __str__(self):
         return self.title
+    
+class QuizQuestion(models.Model):
+    lesson = models.ForeignKey(LearningMaterial, on_delete=models.CASCADE, related_name="quizzes")
+    question = models.CharField(max_length=300)
+    option1 = models.CharField(max_length=200)
+    option2 = models.CharField(max_length=200)
+    option3 = models.CharField(max_length=200)
+    option4 = models.CharField(max_length=200)
+    correct_answer = models.CharField(
+        max_length=200,
+        choices=[
+            ("option1", "Option 1"),
+            ("option2", "Option 2"),
+            ("option3", "Option 3"),
+            ("option4", "Option 4"),
+        ]
+    )
+
+    def __str__(self):
+        return f"{self.lesson.title} - {self.question}"
+    
+    
+class QuizAttempt(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(LearningMaterial, on_delete=models.CASCADE)
+    score = models.IntegerField()
+    total = models.IntegerField()
+    attempted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'lesson')  # একজন user প্রতি lesson একবার attempt করতে পারবে
+
+    def __str__(self):
+        return f"{self.user.username} - {self.lesson.title} ({self.score}/{self.total})"

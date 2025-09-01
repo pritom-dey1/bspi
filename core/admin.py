@@ -1,18 +1,30 @@
 from django.contrib import admin
-from .models import Announcement, ContactMessage, Event, EventMomentImage, CustomUser, Person, LeaderboardMember, LearningMaterial, HelpPost, Comment
+from .models import (
+    Announcement, ContactMessage, Event, EventMomentImage, 
+    CustomUser, Person, LeaderboardMember, LearningMaterial, 
+    HelpPost, Comment, QuizQuestion
+)
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm
-# --- existing admin classes ---
+
+# --- Quiz Inline ---
+class QuizQuestionInline(admin.TabularInline):
+    model = QuizQuestion
+    extra = 1   # নতুন lesson add করার সময় 1 টা খালি quiz form দেখাবে
+
 
 @admin.register(LearningMaterial)
 class LearningMaterialAdmin(admin.ModelAdmin):
     list_display = ('title', 'wing')
     search_fields = ('title',)
     list_filter = ('wing',)
+    inlines = [QuizQuestionInline]   # এখানে inline attach করলাম
+
 
 @admin.register(LeaderboardMember)
 class LeaderboardAdmin(admin.ModelAdmin):
     list_display = ('name', 'department', 'project_name')
+
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
@@ -20,10 +32,12 @@ class PersonAdmin(admin.ModelAdmin):
     list_filter = ('role',)
     search_fields = ('name', 'position')
 
+
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('title', 'created_at', 'question', 'answer')
 
 admin.site.register(Announcement, AnnouncementAdmin)
+
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
@@ -46,15 +60,20 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'session', 'department', 'wing', 'is_leader', 'profile_pic')
+            'fields': (
+                'username', 'email', 'password1', 'password2',
+                'session', 'department', 'wing', 'is_leader', 'profile_pic'
+            )
         }),
     )
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
+
 class EventMomentImageInline(admin.TabularInline):
     model = EventMomentImage
     extra = 1 
+
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -62,16 +81,16 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'created_at')
     search_fields = ('title',)
 
-# -------- Add HelpPost Admin --------
 
+# -------- Add HelpPost Admin --------
 @admin.register(HelpPost)
 class HelpPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'created_at')
     search_fields = ('title', 'content', 'user__username')
     list_filter = ('created_at',)
 
-# -------- Add Comment Admin --------
 
+# -------- Add Comment Admin --------
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('post', 'user', 'content', 'created_at')

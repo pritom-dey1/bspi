@@ -25,7 +25,8 @@
 <input placeholder="Enter Your Name" type="text" name="username" id="id_username"
        value="{% if form.username.value %}{{ form.username.value }}{% endif %}" required>
 {% if form.username.errors %}
-    <div class="error">{{ form.username.errors.0 }}</div>
+    <div class="error" style="font-size: 14px; margin-bottom: 10px; color: red; text-transform: uppercase;
+    ">{{ form.username.errors.0 }}</div>
 {% endif %}
 
 <!-- Email -->

@@ -1779,7 +1779,7 @@ justify-content: center;
 .leader_board{
   padding: 40px;
   margin-top: 20px;
-  max-width: 84%;
+  max-width: 1090px;
   border-radius: 10px;
   margin: 0 auto;
   border: 2px solid #002fff;
@@ -1990,7 +1990,7 @@ color: #fff;
 
 /* for phone  */
 
-@media (max-width: 576px) {
+@media (max-width: 920px) {
   .links{
     display: none;
   }
@@ -2512,4 +2512,12 @@ width: 100%;
   font-family: poppins;
 
   justify-content: center;
+}
+.learning_button{
+  background-color: #1f54ff;
+  text-decoration: none;
+  color: #fff;
+
+  padding: 6px 15px;
+  border-radius: 5px;
 }

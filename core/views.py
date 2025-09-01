@@ -12,7 +12,7 @@ from .forms import HelpPostForm
 from django.conf import settings  
 from django.core.mail import send_mail
 from .forms import RegistrationForm
-from .models import CustomUser
+from .models import CustomUser ,QuizAttempt
 from .models import Event
 from .utils import generate_verification_code, send_verification_email
 from django.shortcuts import redirect
@@ -27,7 +27,7 @@ from axes.handlers.proxy import AxesProxyHandler
 from django.contrib import messages
 import bleach
 import json
-from .models import HelpPost, Comment
+from .models import HelpPost, Comment ,QuizQuestion
 from .forms import HelpPostForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -372,6 +372,50 @@ class ApprovalCheckMiddleware:
     
 @login_required
 def learning_page(request):
-    user_wing = request.user.wing
-    lessons = LearningMaterial.objects.filter(wing=user_wing)
+    lessons = LearningMaterial.objects.filter(wing=request.user.wing)
     return render(request, 'learning.html', {'lessons': lessons})
+
+
+@login_required
+def quiz_page(request, lesson_id):
+    lesson = get_object_or_404(LearningMaterial, id=lesson_id)
+    questions = QuizQuestion.objects.filter(lesson=lesson)
+
+    # আগে চেক করবো user এই lesson-এর quiz দিয়েছে কিনা
+    attempt = QuizAttempt.objects.filter(user=request.user, lesson=lesson).first()
+
+    if attempt:  
+        # Already quiz দিয়েছে, result দেখাই
+        return render(request, "quiz_result.html", {
+            "lesson": lesson,
+            "score": attempt.score,
+            "total": attempt.total,
+            "already_done": True
+        })
+
+    # যদি না দিয়ে থাকে তাহলে normal quiz page
+    if request.method == "POST":
+        score = 0
+        total = questions.count()
+
+        for question in questions:
+            selected = request.POST.get(str(question.id))
+            if selected == getattr(question, "correct_answer"):
+                score += 1
+
+        # Attempt save
+        attempt = QuizAttempt.objects.create(
+            user=request.user,
+            lesson=lesson,
+            score=score,
+            total=total
+        )
+
+        return render(request, "quiz_result.html", {
+            "lesson": lesson,
+            "score": score,
+            "total": total,
+            "already_done": False
+        })
+
+    return render(request, "quiz.html", {"lesson": lesson, "questions": questions})

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>{{ lesson.title }} - Quiz Result</h2>
+  <p>You got {{ score }} out of {{ total }}.</p>
+
+  {% if already_done %}
+    <p style="color: red; font-weight: bold;">
+      (You already attempted this quiz before. This is your saved result.)
+    </p>
+  {% endif %}
+
+  <a href="{% url 'learning' %}">Back to Lessons</a>
+{% endblock %}

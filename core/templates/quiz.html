@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+.qu
+{% endblock %}
+<h2>{{ lesson.title }} - Quiz</h2>
+<form method="POST">
+  {% csrf_token %}
+  {% for q in questions %}
+    <div style="color: #fff; margin-bottom: 20px;">
+      <p><strong>Q{{ forloop.counter }}: {{ q.question }}</strong></p>
+      <label><input type="radio" name="{{ q.id }}" value="option1"> {{ q.option1 }}</label><br>
+      <label><input type="radio" name="{{ q.id }}" value="option2"> {{ q.option2 }}</label><br>
+      <label><input type="radio" name="{{ q.id }}" value="option3"> {{ q.option3 }}</label><br>
+      <label><input type="radio" name="{{ q.id }}" value="option4"> {{ q.option4 }}</label><br>
+    </div>
+  {% endfor %}
+  <button type="submit">Submit Quiz</button>
+</form>
