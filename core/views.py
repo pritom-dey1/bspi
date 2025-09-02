@@ -5,7 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import ContactForm
 from django.views.decorators.http import require_POST
 from django.shortcuts import render
+from django.core.paginator import Paginator
 
+from .forms import LessonCommentForm
+from .models import LessonComment
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import HelpPostForm
@@ -505,18 +508,53 @@ def quiz_page(request, lesson_id):
 def lesson_video_page(request, lesson_id):
     main_video = get_object_or_404(LearningMaterial, id=lesson_id)
     
-    # Optional: related videos, same wing, exclude main
+    # Related videos
     related_videos = LearningMaterial.objects.filter(
         wing=request.user.wing
     ).exclude(id=lesson_id)
 
-    # Pagination optional
-    from django.core.paginator import Paginator
     paginator = Paginator(related_videos, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Comment system
+    comments = main_video.comments.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        form = LessonCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.lesson = main_video
+            comment.user = request.user
+            comment.save()
+            return redirect('lesson_video_page', lesson_id=lesson_id)
+    else:
+        form = LessonCommentForm()
+
     return render(request, 'lession_vd.html', {
         'main_video': main_video,
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'comments': comments,
+        'form': form
+    })
+
+
+@require_POST
+@login_required
+def add_lesson_comment(request, lesson_id):
+    content = request.POST.get('content', '').strip()
+    if not content:
+        return JsonResponse({'error': 'Comment cannot be empty'}, status=400)
+
+    lesson = get_object_or_404(LearningMaterial, id=lesson_id)
+    comment = LessonComment.objects.create(
+        lesson=lesson,
+        user=request.user,
+        content=content
+    )
+
+    return JsonResponse({
+        'username': comment.user.username,
+        'content': comment.content,
+        'created_at': comment.created_at.strftime("%b %d, %Y %H:%M")
     })

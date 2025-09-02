@@ -18,9 +18,8 @@ class LearningMaterialAdmin(admin.ModelAdmin):
     list_display = ('title', 'wing')
     search_fields = ('title',)
     list_filter = ('wing',)
-    inlines = [QuizQuestionInline]   # এখানে inline attach করলাম
-
-
+    inlines = [QuizQuestionInline]
+    fields = ('title', 'wing', 'video', 'thumbnail', 'description')  
 @admin.register(LeaderboardMember)
 class LeaderboardAdmin(admin.ModelAdmin):
     list_display = ('name', 'department', 'project_name')

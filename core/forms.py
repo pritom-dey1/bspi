@@ -3,7 +3,19 @@ from .models import ContactMessage
 from .models import CustomUser
 import bleach
 from .models import HelpPost
+from .models import LessonComment
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+class LessonCommentForm(forms.ModelForm):
+    class Meta:
+        model = LessonComment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 2,
+                'placeholder': 'Add a comment...',
+                'class': 'form-control'
+            })
+        }
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):

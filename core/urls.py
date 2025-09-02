@@ -4,11 +4,12 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
-from .views import CustomLoginView
+from .views import CustomLoginView, add_lesson_comment
 
 urlpatterns = [
     path('help/', views.help_section, name='help_section'),
     path('', views.home, name='home'),
+     path('lesson/<int:lesson_id>/add-comment/', add_lesson_comment, name='add_lesson_comment'),
     path("quiz/<int:lesson_id>/download/", views.download_quiz_pdf, name="download_quiz_pdf"),
     path('lesson/<int:lesson_id>/', views.lesson_video_page, name='lesson_video_page'),
 

@@ -1,58 +1,189 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block title %}{{ main_video.title }}{% endblock %}
 
-<div class="main_video" style="text-align:center; margin-bottom:40px;">
-    <h2 style="margin-bottom:20px;">{{ main_video.title }}</h2>
-
-    {% if main_video.video %}
-        <video width="80%" height="400" controls preload="auto">
-            <source src="{{ main_video.video.url }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    {% else %}
-        <p style="color:red; font-weight:bold;">There is no video for this lesson.</p>
-    {% endif %}
+{% block content %}
+<div class="vd_banner">
+    <h1>{{ main_video.title }}</h1>
 </div>
 
-<div class="related_videos" style="max-width:1200px; margin: 0 auto;">
-    <h3 style="margin-bottom:20px;">Related Videos</h3>
-    <div id="related_videos_container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
-        {% for video in page_obj %}
-            <div class="related_video_item" style="background:#111; padding:10px; border-radius:10px; text-align:center;">
-                <img 
-                    src="{% if video.thumbnail %}{{ video.thumbnail.url }}{% else %}{% static 'default_thumbnail.png' %}{% endif %}" 
-                    alt="{{ video.title }}" 
-                    style="width:100%; height:120px; object-fit:cover; border-radius:5px; cursor:pointer;"
-                    {% if video.video %}onclick="playVideo('{{ video.video.url }}', '{{ video.title }}')" {% endif %}
-                >
-                <p style="margin-top:10px; color:#fff;">{{ video.title }}</p>
+<div class="video_page" style="display:grid; grid-template-columns:2fr 1fr; gap:20px; max-width:1300px; margin:0 auto;">
+
+    <!-- Main Video Section -->
+    <div class="main_video">
+        {% if main_video.video %}
+            <video width="100%" height="500" controls preload="auto" style="border-radius:10px; background:#000;">
+                <source src="{{ main_video.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <h2>{{ main_video.title }}</h2>
+
+            <!-- Description with See More/Less -->
+            <p id="description" style=" color:#ffffff; font-family: poppins; font-size: 14px;">
+                {{ main_video.description }}
+            </p>
+            <button id="toggle_desc" style=" border:none; background:transparent; color:#28a9ff; border-radius:4px; cursor:pointer;">
+                See more...
+            </button>
+
+            <!-- Comments Section -->
+            <div class="comments_section" style="margin-top:30px;">
+                <h3 style="font-family: poppins; color: #fff;">Comments</h3>
+                {% if user.is_authenticated %}
+                    <textarea id="comment_input" rows="3" placeholder="Add a comment..." ></textarea>
+                    <button id="post_comment_btn" style="padding:10px 15px; background:#1b74fa; color:white; border:none; border-radius:4px; margin-top:5px;">
+                        Post Comment
+                    </button>
+                {% else %}
+                    <p style="color:#999;">Please <a href="{% url 'login' %}">login</a> to comment.</p>
+                {% endif %}
+
+                <div id="comments_list" style="margin-top:20px;">
+                    {% for comment in comments %}
+                        <div class="comment_item" style="padding:10px; background:#111; margin-bottom:10px; border-radius:6px;">
+                            <strong style="text-transform: uppercase;font-family: poppins; color:#1e78ff;font-weight: 500;font-size: 16px;">{{ comment.user.username }}</strong>
+                            <span style="color:#999; font-size:0.8rem;">{{ comment.created_at|date:"M d, Y H:i" }}</span>
+                            <p style="margin:5px 0 0 0; color:#fff; font-family: poppins; font-size: 12px;">{{ comment.content }}</p>
+                        </div>
+                    {% empty %}
+                        <p style="color:#999;">No comments yet. Be the first to comment!</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Toggle Comments Button -->
+                <button id="toggle_comments" style="margin-top:10px; background:transparent; border:none; color:#28a9ff; cursor:pointer; display:none;">
+                    See all comments
+                </button>
             </div>
-        {% empty %}
-            <p style="grid-column:1/-1; text-align:center; color:red;">No related videos found.</p>
-        {% endfor %}
+        {% else %}
+            <p style="color:red; font-weight:bold;">There is no video for this lesson.</p>
+        {% endif %}
     </div>
 
-    {% if page_obj.has_next %}
-        <div style="text-align:center; margin-top:20px;">
-            <button id="load_more" data-next-page="{{ page_obj.next_page_number }}" style="padding:10px 20px; background:#0d47a1; color:#fff; border:none; border-radius:5px; cursor:pointer;">
-                Load More
-            </button>
+    <!-- Related Videos Section -->
+    <div class="related_videos">
+        <h3 style="margin-bottom:20px;">Related Videos</h3>
+        <div id="related_videos_container" style="display:flex; flex-direction:column; gap:15px;">
+            {% for video in page_obj %}
+                <a href="{% url 'lesson_video_page' video.id %}" class="related_video_item" style="display:flex; gap:10px; align-items:center; background:#111; padding:8px; border-radius:8px; text-decoration:none;">
+                    <img src="{% if video.thumbnail %}{{ video.thumbnail.url }}{% else %}{% static 'default_thumbnail.png' %}{% endif %}" alt="{{ video.title }}" style="width:120px; height:80px; object-fit:cover; border-radius:5px;">
+                    <p style="margin:0; color:#fff; font-size:0.9rem; font-family: poppins;">{{ video.title }}</p>
+                </a>
+            {% empty %}
+                <p style="text-align:center; color:red;">No related videos found.</p>
+            {% endfor %}
         </div>
-    {% endif %}
+        {% if page_obj.has_next %}
+            <div style="text-align:center; margin-top:20px;">
+                <button id="load_more" data-next-page="{{ page_obj.next_page_number }}" style="padding:10px 20px; background:#0d47a1; color:#fff; border:none; border-radius:5px; cursor:pointer;">
+                    Load More
+                </button>
+            </div>
+        {% endif %}
+    </div>
+
 </div>
 
 <script>
-function playVideo(url, title){
-    const mainVideo = document.querySelector('.main_video video');
-    if(mainVideo){
-        mainVideo.src = url;
-        mainVideo.play();
-        document.querySelector('.main_video h2').innerText = title;
-    } else {
-        alert('This lesson has no video!');
-    }
-}
+// Description See More / See Less
+document.addEventListener('DOMContentLoaded', () => {
+    const desc = document.getElementById('description');
+    const toggleBtn = document.getElementById('toggle_desc');
+    if(desc && toggleBtn){
+        const fullText = desc.innerText;
+        const words = fullText.split(' ');
+        const previewWords = 20;
 
-// Load more related videos via AJAX
+        if(words.length > previewWords){
+            const preview = words.slice(0, previewWords).join(' ') + '...';
+            desc.innerText = preview;
+
+            toggleBtn.style.display = 'inline-block';
+            let expanded = false;
+
+            toggleBtn.addEventListener('click', () => {
+                if(expanded){
+                    desc.innerText = preview;
+                    toggleBtn.innerText = 'See more';
+                    expanded = false;
+                } else {
+                    desc.innerText = fullText;
+                    toggleBtn.innerText = 'See less';
+                    expanded = true;
+                }
+            });
+        } else {
+            toggleBtn.style.display = 'none';
+        }
+    }
+});
+
+// Toggle Comments (Show / Hide)
+document.addEventListener('DOMContentLoaded', () => {
+    const commentsList = document.getElementById('comments_list');
+    const toggleCommentsBtn = document.getElementById('toggle_comments');
+
+    if(commentsList && toggleCommentsBtn){
+        const maxVisible = 3; 
+        let expanded = false;
+
+        function updateCommentsVisibility(){
+            const comments = commentsList.querySelectorAll('.comment_item');
+            if(comments.length > maxVisible){
+                comments.forEach((c, i) => {
+                    c.style.display = (expanded || i < maxVisible) ? 'block' : 'none';
+                });
+                toggleCommentsBtn.style.display = 'inline-block';
+                toggleCommentsBtn.innerText = expanded ? 'Hide comments' : 'See all comments';
+            } else {
+                comments.forEach(c => c.style.display = 'block');
+                toggleCommentsBtn.style.display = 'none';
+            }
+        }
+
+        // Initial setup
+        updateCommentsVisibility();
+
+        toggleCommentsBtn.addEventListener('click', () => {
+            expanded = !expanded;
+            updateCommentsVisibility();
+        });
+
+        // Add comment AJAX
+        document.getElementById('post_comment_btn')?.addEventListener('click', function(){
+            const content = document.getElementById('comment_input').value.trim();
+            if(!content) return alert('Comment cannot be empty.');
+
+            fetch("{% url 'add_lesson_comment' main_video.id %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `content=${encodeURIComponent(content)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error){
+                    alert(data.error);
+                } else {
+                    const div = document.createElement('div');
+                    div.classList.add('comment_item');
+                    div.style.cssText = "padding:10px; background:#111; margin-bottom:10px; border-radius:6px;";
+                    div.innerHTML = `<strong style="color:#0d47a1;">${data.username}</strong>
+                                     <span style="color:#999; font-size:0.8rem;">${data.created_at}</span>
+                                     <p style="margin:5px 0 0 0; color:#fff;">${data.content}</p>`;
+                    commentsList.prepend(div);
+                    document.getElementById('comment_input').value = '';
+                    updateCommentsVisibility();
+                }
+            })
+            .catch(err => console.error(err));
+        });
+    }
+});
+
+// Load more related videos
 document.getElementById('load_more')?.addEventListener('click', function(){
     const button = this;
     const nextPage = button.dataset.nextPage;
@@ -62,13 +193,9 @@ document.getElementById('load_more')?.addEventListener('click', function(){
         .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-
-            // Append new related videos
             const newVideos = doc.querySelectorAll('#related_videos_container .related_video_item');
             const container = document.getElementById('related_videos_container');
             newVideos.forEach(v => container.appendChild(v));
-
-            // Update next page or hide button
             const newButton = doc.querySelector('#load_more');
             if(newButton){
                 button.dataset.nextPage = newButton.dataset.nextPage;
@@ -81,12 +208,10 @@ document.getElementById('load_more')?.addEventListener('click', function(){
 </script>
 
 <style>
-.related_video_item p {
-    font-size: 0.95rem;
-    text-transform: uppercase;
-}
-.related_video_item img:hover {
-    opacity: 0.85;
+.related_video_item:hover {
+    background:#222;
     transition: all 0.3s;
 }
 </style>
+
+{% endblock %}
