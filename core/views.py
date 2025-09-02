@@ -37,6 +37,85 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.units import inch
+
+@login_required
+def download_quiz_pdf(request, lesson_id):
+    lesson = get_object_or_404(LearningMaterial, id=lesson_id)
+    attempt = QuizAttempt.objects.filter(user=request.user, lesson=lesson).first()
+    questions = QuizQuestion.objects.filter(lesson=lesson)
+
+    if not attempt:
+        return HttpResponse("No quiz attempt found.", status=404)
+
+    # HTTP Response for PDF
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="{lesson.title}_quiz_result.pdf"'
+
+    # PDF document
+    doc = SimpleDocTemplate(response, pagesize=A4,
+                            rightMargin=30, leftMargin=30,
+                            topMargin=30, bottomMargin=30)
+
+    story = []
+    styles = getSampleStyleSheet()
+
+    # Custom Styles
+    title_style = ParagraphStyle(
+        "title",
+        parent=styles["Heading1"],
+        fontSize=20,
+        alignment=1,  # center
+        textColor=colors.HexColor("#0d47a1"),  # deep blue
+        spaceAfter=20,
+    )
+    normal_style = styles["Normal"]
+
+    # Header
+    story.append(Paragraph("BSPI COMPUTER CLUB", title_style))
+    story.append(Paragraph(f"Quiz Result for <b>{lesson.title}</b>", normal_style))
+    story.append(Paragraph(f"Student: <b>{request.user.username}</b>", normal_style))
+    story.append(Paragraph(f"Score: <b>{attempt.score}</b> / {attempt.total}", normal_style))
+    story.append(Spacer(1, 0.3 * inch))
+
+    # Table data (NO 'Your Answer' column)
+    data = [["#", "Question", "Options", "Correct Answer"]]
+
+    for i, q in enumerate(questions, start=1):
+        options = f"a) {q.option1}<br/>b) {q.option2}<br/>c) {q.option3}<br/>d) {q.option4}"
+        correct = getattr(q, q.correct_answer)
+
+        data.append([
+            str(i),
+            Paragraph(q.question, normal_style),
+            Paragraph(options, normal_style),
+            Paragraph(correct, normal_style),
+        ])
+
+    # Table formatting
+    table = Table(data, colWidths=[30, 180, 200, 140])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1565c0")),  # Header bg
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 9),
+        ("BOX", (0, 0), (-1, -1), 1, colors.black),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+    story.append(table)
+    doc.build(story)
+    return response
+
 @login_required
 def help_section(request):
     if request.method == 'POST':
@@ -376,24 +455,24 @@ def learning_page(request):
     return render(request, 'learning.html', {'lessons': lessons})
 
 
+
 @login_required
 def quiz_page(request, lesson_id):
     lesson = get_object_or_404(LearningMaterial, id=lesson_id)
     questions = QuizQuestion.objects.filter(lesson=lesson)
 
-    # আগে চেক করবো user এই lesson-এর quiz দিয়েছে কিনা
     attempt = QuizAttempt.objects.filter(user=request.user, lesson=lesson).first()
 
-    if attempt:  
-        # Already quiz দিয়েছে, result দেখাই
+    if attempt:
+        percentage = (attempt.score / attempt.total) * 100 if attempt.total > 0 else 0
         return render(request, "quiz_result.html", {
             "lesson": lesson,
             "score": attempt.score,
             "total": attempt.total,
+            "percentage": percentage,
             "already_done": True
         })
 
-    # যদি না দিয়ে থাকে তাহলে normal quiz page
     if request.method == "POST":
         score = 0
         total = questions.count()
@@ -403,7 +482,6 @@ def quiz_page(request, lesson_id):
             if selected == getattr(question, "correct_answer"):
                 score += 1
 
-        # Attempt save
         attempt = QuizAttempt.objects.create(
             user=request.user,
             lesson=lesson,
@@ -411,10 +489,13 @@ def quiz_page(request, lesson_id):
             total=total
         )
 
+        percentage = (score / total) * 100 if total > 0 else 0
+
         return render(request, "quiz_result.html", {
             "lesson": lesson,
             "score": score,
             "total": total,
+            "percentage": percentage,
             "already_done": False
         })
 

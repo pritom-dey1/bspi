@@ -1,13 +1,48 @@
 {% extends 'base.html' %}
+{% block title %}
+    {{ lesson.title }} - Quiz Result
+{% endblock %}
 {% block content %}
-  <h2>{{ lesson.title }} - Quiz Result</h2>
-  <p>You got {{ score }} out of {{ total }}.</p>
+  <div class="quiz_banner">
+    <h1 style="font-weight: 500;text-transform: uppercase; font-family: poppins; color: #fff; font-size: 40px;text-align: center;">
+      QUIZ Result FOR - {{ lesson.title }}
+    </h1>
+  </div>
 
-  {% if already_done %}
-    <p style="color: red; font-weight: bold;">
-      (You already attempted this quiz before. This is your saved result.)
-    </p>
-  {% endif %}
+  <div class="result_warper" style="padding:20px; text-align:center;">
+        <!-- Feedback Section -->
+    <div class="Feedback" style="font-family: poppins; font-weight:bold;">
+      {% if percentage <= 20 %}
+        <p style="text-transform: uppercase; font-size: 60px; line-height: 40px;">😢  <br> <span style="font-size: 20px; color: rgb(255, 47, 47); line-height: 1px;">Very Poor - You need a lot of practice.</span></p>
+      {% elif percentage <= 40 %}
+        <p style="text-transform: uppercase; font-size: 60px; line-height: 40px;"> 😐 <br><span style="font-size: 20px; color: rgb(255, 172, 47);"> Not Bad - Keep trying, you can do better!</span></p>
+      {% elif percentage <= 60 %}
+        <p style="text-transform: uppercase; font-size: 60px; line-height: 40px;">😊 <br><span  style="font-size: 20px; color: greenyellow;"> Good - You are improving!</span></p>
+      {% elif percentage <= 80 %}
+        <p style="text-transform: uppercase; font-size: 60px; line-height: 40px;">😃  <br><span  style="font-size: 20px; color: greenyellow;">Very Good - Great job, almost perfect!</span></p>
+      {% else %}
+        <p style="text-transform: uppercase; font-size: 60px; line-height: 40px;">🔥  <br><span
+          style="font-size: 20px; color: greenyellow; line-height: 1px;">
+          Excellent - You nailed it!
+        </span></p>
+      {% endif %}
+    </div>
+    <p class="result"> You got <b>{{ score }}</b> out of <b>{{ total }}</b> ({{ percentage|floatformat:0 }}%).</p>
 
-  <a href="{% url 'learning' %}">Back to Lessons</a>
+    {% if already_done %}
+      <p  style="color: red; font-weight: bold; font-family: poppins;">
+        (You already attempted this quiz before. This is your saved result.)
+      </p>
+    {% endif %}
+
+
+
+    <!-- Buttons -->
+     <div class="but-box" style="margin-top: 15px;">
+         <a href="{% url 'download_quiz_pdf' lesson.id %}" class="learning_button" style="margin-right:10px;">
+      📥 Download Result as PDF
+    </a>
+    <a href="{% url 'learning' %}" class="learning_button" >⬅ Back to Lessons</a>
+     </div>
+  </div>
 {% endblock %}

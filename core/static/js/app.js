@@ -121,8 +121,8 @@ $(document).ready(function () {
 
 
 gsap.to(".loader",{
-  y:-1000,
-  duration:1,
+  y:-2000,
+  duration:1.5,
   ease:"power1.inOut",
   delay:.4,
 })
@@ -324,3 +324,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+  document.querySelectorAll('.option').forEach(optionDiv => {
+    const radios = optionDiv.querySelectorAll('input[type="radio"]');
+    
+    radios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        // remove previous selected in this question only
+        radios.forEach(r => r.parentElement.classList.remove('selected'));
+
+        // add selected to current
+        if (radio.checked) {
+          radio.parentElement.classList.add('selected');
+        }
+      });
+    });
+  });

@@ -1,18 +1,50 @@
 {% extends 'base.html' %}
-{% block content %}
-.qu
+{% block title %}
+    {{ lesson.title }} - Quiz
 {% endblock %}
-<h2>{{ lesson.title }} - Quiz</h2>
-<form method="POST">
-  {% csrf_token %}
-  {% for q in questions %}
-    <div style="color: #fff; margin-bottom: 20px;">
-      <p><strong>Q{{ forloop.counter }}: {{ q.question }}</strong></p>
-      <label><input type="radio" name="{{ q.id }}" value="option1"> {{ q.option1 }}</label><br>
-      <label><input type="radio" name="{{ q.id }}" value="option2"> {{ q.option2 }}</label><br>
-      <label><input type="radio" name="{{ q.id }}" value="option3"> {{ q.option3 }}</label><br>
-      <label><input type="radio" name="{{ q.id }}" value="option4"> {{ q.option4 }}</label><br>
-    </div>
-  {% endfor %}
-  <button type="submit">Submit Quiz</button>
-</form>
+
+{% block content %}
+<div class="quiz_banner">
+    <h1 style="font-weight: 500; text-transform: uppercase; font-family: poppins; color: #fff; font-size: 40px; text-align: center;">
+        QUIZ FOR - {{ lesson.title }}
+    </h1>
+</div>
+
+<div class="quiz_warper">
+    {% if questions %}
+        <form method="POST">
+            {% csrf_token %}
+            {% for q in questions %}
+                <div class="responsive_quiz" style="color: #fff; margin-bottom: 20px;">
+                    <p style="font-size: 20px; font-family: poppins; font-weight: 500;">
+                        {{ forloop.counter }}. {{ q.question }}
+                    </p>
+                    <div class="option">
+                        <label class="option_lb">
+                            <input type="radio" name="{{ q.id }}" value="option1">
+                            <span style="font-family: poppins;" class="choice">{{ q.option1 }}</span>
+                        </label>
+                        <label class="option_lb">
+                            <input type="radio" name="{{ q.id }}" value="option2">
+                            <span style="font-family: poppins;" class="choice">{{ q.option2 }}</span>
+                        </label>
+                        <label class="option_lb">
+                            <input type="radio" name="{{ q.id }}" value="option3">
+                            <span style="font-family: poppins;" class="choice">{{ q.option3 }}</span>
+                        </label>
+                        <label class="option_lb">
+                            <input type="radio" name="{{ q.id }}" value="option4">
+                            <span style="font-family: poppins;" class="choice">{{ q.option4 }}</span>
+                        </label>
+                    </div>
+                </div>
+            {% endfor %}
+            <button class="learning_button" style="padding: 10px 20px; margin-top: 10px; border: none;" type="submit">Submit Quiz</button>
+        </form>
+    {% else %}
+        <div style="color: #fff; font-size: 24px; font-family: poppins; text-align: center; padding: 50px 0;">
+            <p style="color: red;">There is no quiz for this topic.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

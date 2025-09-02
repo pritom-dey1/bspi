@@ -1985,12 +1985,71 @@ color: #fff;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+  .result{
+    margin-top: 15px;
+    font-family: poppins;
+  }
 /* resposive style  */
 
 
 /* for phone  */
 
 @media (max-width: 920px) {
+  .result_warper{
+  width: 90% !important;
+  padding: 50px !important;
+
+}
+.but-box{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+  .Feedback p{
+    line-height: 30px !important;
+  }
+ 
+  .quiz_banner{
+ 
+  padding: 100px 0 !important;
+}
+.responsive_quiz p{
+
+  font-size: 16px !important;
+}
+.quiz_banner h1{
+  margin-top: 20px;
+  font-size: 20px !important;
+}
+.quiz_warper{
+
+  width: 90% !important;
+  margin: 30px auto
+  ;
+}
+input[type="radio"] {
+  display: none; /* Completely hides the circle */
+}
+.option{
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.option_lb{
+  background-color: #ffffff36;
+  padding: 10px 15px;
+  border-radius: 5px;
+   cursor: pointer;
+    transition: background 0.3s;
+  border: 1px solid #ffffff79;
+}
+.option_lb.selected {
+    background: #61ee65;
+    color: white;
+}
   .links{
     display: none;
   }
@@ -2517,7 +2576,55 @@ width: 100%;
   background-color: #1f54ff;
   text-decoration: none;
   color: #fff;
-
+  font-family: poppins;
   padding: 6px 15px;
   border-radius: 5px;
+}
+.quiz_banner{
+    background: url('../img/login.jpg') no-repeat;
+    background-position: center;
+  background-size: cover;
+  padding: 150px 0;
+}
+.quiz_warper{
+ background: rgba(255, 255, 255, 0.041);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.493);  color: #efe6e6;
+  padding: 20px;
+  border-radius: 5px;
+  width: 70%;
+  margin: 30px auto
+  ;
+}
+input[type="radio"] {
+  display: none; /* Completely hides the circle */
+}
+.option{
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.option_lb{
+  background-color: #ffffff36;
+  padding: 10px 15px;
+  border-radius: 5px;
+   cursor: pointer;
+    transition: background 0.3s;
+  border: 1px solid #ffffff79;
+}
+.option_lb.selected {
+    background: #61ee65;
+    color: white;
+}
+.result_warper{
+  width: 70%;
+  padding: 30px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.041);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.671);
+  color: #efe6e6;
+  border-radius: 5px;
+  margin-top: 50px;
 }
