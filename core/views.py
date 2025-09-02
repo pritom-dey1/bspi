@@ -500,3 +500,23 @@ def quiz_page(request, lesson_id):
         })
 
     return render(request, "quiz.html", {"lesson": lesson, "questions": questions})
+
+@login_required
+def lesson_video_page(request, lesson_id):
+    main_video = get_object_or_404(LearningMaterial, id=lesson_id)
+    
+    # Optional: related videos, same wing, exclude main
+    related_videos = LearningMaterial.objects.filter(
+        wing=request.user.wing
+    ).exclude(id=lesson_id)
+
+    # Pagination optional
+    from django.core.paginator import Paginator
+    paginator = Paginator(related_videos, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'lession_vd.html', {
+        'main_video': main_video,
+        'page_obj': page_obj
+    })

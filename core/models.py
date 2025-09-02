@@ -141,6 +141,8 @@ class LearningMaterial(models.Model):
     image = models.ImageField(upload_to='learning_materials/')
     wing = models.CharField(max_length=100, choices=CustomUser.WING_CHOICES)
     content_link = models.URLField(blank=True) 
+    video = models.FileField(upload_to='learning_videos/', blank=True, null=True)  # New video field
+    thumbnail = models.ImageField(upload_to='learning_thumbnails/', blank=True, null=True)  # Optional thumbnail
 
     def __str__(self):
         return self.title
@@ -174,7 +176,7 @@ class QuizAttempt(models.Model):
     attempted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'lesson')  # একজন user প্রতি lesson একবার attempt করতে পারবে
+        unique_together = ('user', 'lesson') 
 
     def __str__(self):
         return f"{self.user.username} - {self.lesson.title} ({self.score}/{self.total})"

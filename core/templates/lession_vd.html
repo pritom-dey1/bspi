@@ -1,0 +1,92 @@
+{% load static %}
+
+<div class="main_video" style="text-align:center; margin-bottom:40px;">
+    <h2 style="margin-bottom:20px;">{{ main_video.title }}</h2>
+
+    {% if main_video.video %}
+        <video width="80%" height="400" controls preload="auto">
+            <source src="{{ main_video.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    {% else %}
+        <p style="color:red; font-weight:bold;">There is no video for this lesson.</p>
+    {% endif %}
+</div>
+
+<div class="related_videos" style="max-width:1200px; margin: 0 auto;">
+    <h3 style="margin-bottom:20px;">Related Videos</h3>
+    <div id="related_videos_container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+        {% for video in page_obj %}
+            <div class="related_video_item" style="background:#111; padding:10px; border-radius:10px; text-align:center;">
+                <img 
+                    src="{% if video.thumbnail %}{{ video.thumbnail.url }}{% else %}{% static 'default_thumbnail.png' %}{% endif %}" 
+                    alt="{{ video.title }}" 
+                    style="width:100%; height:120px; object-fit:cover; border-radius:5px; cursor:pointer;"
+                    {% if video.video %}onclick="playVideo('{{ video.video.url }}', '{{ video.title }}')" {% endif %}
+                >
+                <p style="margin-top:10px; color:#fff;">{{ video.title }}</p>
+            </div>
+        {% empty %}
+            <p style="grid-column:1/-1; text-align:center; color:red;">No related videos found.</p>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_next %}
+        <div style="text-align:center; margin-top:20px;">
+            <button id="load_more" data-next-page="{{ page_obj.next_page_number }}" style="padding:10px 20px; background:#0d47a1; color:#fff; border:none; border-radius:5px; cursor:pointer;">
+                Load More
+            </button>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function playVideo(url, title){
+    const mainVideo = document.querySelector('.main_video video');
+    if(mainVideo){
+        mainVideo.src = url;
+        mainVideo.play();
+        document.querySelector('.main_video h2').innerText = title;
+    } else {
+        alert('This lesson has no video!');
+    }
+}
+
+// Load more related videos via AJAX
+document.getElementById('load_more')?.addEventListener('click', function(){
+    const button = this;
+    const nextPage = button.dataset.nextPage;
+
+    fetch(`?page=${nextPage}`)
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Append new related videos
+            const newVideos = doc.querySelectorAll('#related_videos_container .related_video_item');
+            const container = document.getElementById('related_videos_container');
+            newVideos.forEach(v => container.appendChild(v));
+
+            // Update next page or hide button
+            const newButton = doc.querySelector('#load_more');
+            if(newButton){
+                button.dataset.nextPage = newButton.dataset.nextPage;
+            } else {
+                button.style.display = 'none';
+            }
+        })
+        .catch(err => console.error('Error loading more videos:', err));
+});
+</script>
+
+<style>
+.related_video_item p {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+}
+.related_video_item img:hover {
+    opacity: 0.85;
+    transition: all 0.3s;
+}
+</style>
