@@ -2048,8 +2048,23 @@ color: #fff;
 
 
 /* for phone  */
-
+.vd_banner h1{
+  font-size: 28px;
+}
 @media (max-width: 920px) {
+      .video_page {
+        grid-template-columns: 1fr !important; /* ek column */
+    }
+    .main_video {
+        order: 1 !important; /* main video upore thakbe */
+    }
+    .related_videos {
+        order: 2 !important; /* related videos niche chole jabe */
+        margin-top: 20px !important;
+    }
+    video {
+        height: auto !important; /* video height adjust hobe */
+    }
   .result_warper{
   width: 90% !important;
   padding: 50px !important;
