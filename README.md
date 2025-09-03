@@ -101,11 +101,14 @@ This website unites all club activities such as announcements, events, learning 
    ```python -m venv venv
       source venv/bin/activate 
 3. **Install Dependencies**
-   ```pip install -r requirements.txt
+   ```
+   pip install -r requirements.txt
 4. **Run Database Migrations**
-   ```python manage.py migrate
+   ```
+   python manage.py migrate
 5. **Start Development Server**
-   ```python manage.py runserver
+   ```
+   python manage.py runserver
 
 **Live link**
 <a  target="_blank" href="https://bspi-1.onrender.com"> View Now </a>
