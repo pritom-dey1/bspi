@@ -928,7 +928,7 @@ font-weight: 500;
 }
 .login_from{
   padding: 150px 0;
-  background: url('../img/hero_bg_ro.jpg') no-repeat;
+  background: url('../img/ano_bg.jpg') no-repeat;
   background-size: cover;
   background-position: bottom;
 }
@@ -987,6 +987,7 @@ font-weight: 500;
   width: 95%;
   margin: 0 auto;
   display: flex;
+  
   justify-content: center;
 }
 .registation_section_warper{
@@ -1084,7 +1085,7 @@ font-weight: 500;
 .learning_warpper{
   
   padding: 50px 0;
-  background: url(../img/hero_bg_ro.jpg) no-repeat;
+  background: url(../img/ano_bg.jpg) no-repeat;
   background-position: center;
   background-size: cover;
 
@@ -2555,6 +2556,13 @@ font-size: 18px !important;
 }
 .Verify_from{
 width: 100%;
+}
+.help_banner{
+  padding: 100px 0;
+}
+.help_banner h2{
+  margin-top: 20px;
+  font-size: 20px;
 }
 .details_top{
   flex-direction: column;

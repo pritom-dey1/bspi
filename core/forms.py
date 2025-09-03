@@ -2,7 +2,7 @@ from django import forms
 from .models import ContactMessage
 from .models import CustomUser
 import bleach
-from .models import HelpPost
+from .models import HelpPost ,LearningMaterial
 from .models import LessonComment
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 class LessonCommentForm(forms.ModelForm):
@@ -17,6 +17,10 @@ class LessonCommentForm(forms.ModelForm):
             })
         }
 
+class LearningMaterialForm(forms.ModelForm):
+    class Meta:
+        model = LearningMaterial
+        fields = ['title', 'description', 'image', 'video', 'thumbnail', 'content_link', 'wing']
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser

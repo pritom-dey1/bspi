@@ -18,8 +18,12 @@
         {% endif %}
       </div>
 
-      <div class="dash_top_right">
+      <div class="dash_top_right" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
         <h2>Welcome, {{ request.user.username }} (Leader)</h2>
+         <a href="{% url 'create_learning_material' %}" 
+       style="text-decoration: none; font-family: poppins; text-transform: uppercase; color: #1cacff; font-weight: 600; margin: 5px 0;">
+       Share Learning Resource
+    </a>
         <div class="details">
           <div class="details_top">
             <p>Department: <span style="color: #1cacff; font-weight: 600;">{{ request.user.department }}</span></p>

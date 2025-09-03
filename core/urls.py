@@ -12,7 +12,7 @@ urlpatterns = [
      path('lesson/<int:lesson_id>/add-comment/', add_lesson_comment, name='add_lesson_comment'),
     path("quiz/<int:lesson_id>/download/", views.download_quiz_pdf, name="download_quiz_pdf"),
     path('lesson/<int:lesson_id>/', views.lesson_video_page, name='lesson_video_page'),
-
+      path('leader/share-learning/', views.create_learning_material, name='create_learning_material'),
     path('create-comment/', views.create_comment, name='create_comment'),
     path('quiz/<int:lesson_id>/', views.quiz_page, name='quiz_page'),
     path('help/create/', views.create_help_post, name='create_help_post'),

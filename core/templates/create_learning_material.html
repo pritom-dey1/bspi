@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+SHARE LEARNING RESOURCE
+{% endblock %}
+
+{% block content %}
+<div class="help_banner">
+    <h2 style="font-family: poppins;">Share a New Learning Resource</h2>
+</div>
+
+<div class="login_from" > 
+    <h2 style="text-align: center; color: #fff; font-size: 2rem; font-weight: 500; text-transform: uppercase; margin-bottom: 50px;">
+        Post your learning resource
+    </h2>
+
+    <div class="login_from_warper">
+        <div class="login_box">
+
+            <form class="login-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <input type="text" name="title" placeholder="Title" required><br><br>
+                
+                <textarea class="des_mar_top" name="description" placeholder="Write a description..." required></textarea><br><br>
+                
+                <label style="font-family: poppins;">Main Image (optional)</label> <br>
+<input type="file" name="image" ><br><br>
+
+<label style="font-family: poppins;">Thumbnail (required)</label> <br>
+<input type="file" name="thumbnail" required> <br><br>
+
+<label style="font-family: poppins;">Video (required)</label> <br>
+<input type="file" name="video" required><br><br>
+                
+                <input type="url" name="content_link" placeholder="Add external content link (optional)"><br><br>
+                
+                <button class="join_now" type="submit">POST RESOURCE</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

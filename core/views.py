@@ -48,7 +48,33 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.units import inch
+@login_required
+def create_learning_material(request):
+    if not request.user.is_leader:
+        return redirect('home')
 
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        thumbnail = request.FILES.get('thumbnail')
+        video = request.FILES.get('video')
+        content_link = request.POST.get('content_link')
+
+        # save to model
+        material = LearningMaterial.objects.create(
+            title=title,
+            description=description,
+            image=image,
+            thumbnail=thumbnail,
+            video=video,
+            content_link=content_link,
+            wing=request.user.wing,
+        )
+        messages.success(request, "Learning resource shared successfully!")
+        return redirect('learning')
+
+    return render(request, 'create_learning_material.html')
 @login_required
 def download_quiz_pdf(request, lesson_id):
     lesson = get_object_or_404(LearningMaterial, id=lesson_id)
