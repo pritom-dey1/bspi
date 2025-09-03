@@ -143,6 +143,6 @@ Admin panel with Jazzmin customization
 ✅ Extra UI Improvements: GSAP animations, better sidebar navigation, quiz highlighting
 
 **👨‍💻 Developed & Designed by:**
-Pritom Dey – Creative Leader & Developer, BSPI Computer Club
+Pritom Dey
 
 
