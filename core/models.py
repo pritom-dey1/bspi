@@ -7,7 +7,7 @@ class HelpPost(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
-    image = models.ImageField(upload_to='helppost_images/', blank=True, null=True)  # ✅ Add this line
+    image = models.ImageField(upload_to='helppost_images/', blank=True, null=True) 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -86,10 +86,10 @@ class CustomUser(AbstractUser):
     
 
 class Event(models.Model):
-    title = models.CharField(max_length=200)                  # Event er title
-    description = models.TextField()                           # Event er details ba description
-    main_image = models.ImageField(upload_to='events/', blank=True, null=True)  # Main banner image (optional)
-    created_at = models.DateTimeField(default=timezone.now)   # Created date/time
+    title = models.CharField(max_length=200)                  
+    description = models.TextField()                           
+    main_image = models.ImageField(upload_to='events/', blank=True, null=True)  
+    created_at = models.DateTimeField(default=timezone.now)   
 
     def __str__(self):
         return self.title
@@ -98,7 +98,7 @@ class Event(models.Model):
 class EventMomentImage(models.Model):
     event = models.ForeignKey(Event, related_name='moments', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='event_moments/')
-    caption = models.CharField(max_length=200, blank=True, null=True)  # optional
+    caption = models.CharField(max_length=200, blank=True, null=True) 
 
     def __str__(self):
         return f"Moment for {self.event.title}"
@@ -114,7 +114,7 @@ class Person(models.Model):
 
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    position = models.CharField(max_length=100, blank=True)  # e.g., Tech Team Lead
+    position = models.CharField(max_length=100, blank=True)  
     bio = models.TextField(blank=True)
     image = models.ImageField(upload_to='profiles/')
     linkedin = models.URLField(blank=True)

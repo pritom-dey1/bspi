@@ -6,7 +6,6 @@ from .forms import ContactForm
 from django.views.decorators.http import require_POST
 from django.shortcuts import render
 from django.core.paginator import Paginator
-
 from .forms import LessonCommentForm
 from .models import LessonComment
 from django.shortcuts import render, redirect
@@ -29,17 +28,13 @@ from axes.helpers import get_client_ip_address
 from axes.handlers.proxy import AxesProxyHandler
 from django.contrib import messages
 import bleach
-import json
 from .models import HelpPost, Comment ,QuizQuestion
 from .forms import HelpPostForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
-
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -84,37 +79,32 @@ def download_quiz_pdf(request, lesson_id):
     if not attempt:
         return HttpResponse("No quiz attempt found.", status=404)
 
-    # HTTP Response for PDF
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="{lesson.title}_quiz_result.pdf"'
 
-    # PDF document
     doc = SimpleDocTemplate(response, pagesize=A4,
-                            rightMargin=30, leftMargin=30,
-                            topMargin=30, bottomMargin=30)
+        rightMargin=30, leftMargin=30,
+        topMargin=30, bottomMargin=30)
 
     story = []
     styles = getSampleStyleSheet()
 
-    # Custom Styles
     title_style = ParagraphStyle(
         "title",
         parent=styles["Heading1"],
         fontSize=20,
-        alignment=1,  # center
-        textColor=colors.HexColor("#0d47a1"),  # deep blue
+        alignment=1,  
+        textColor=colors.HexColor("#0d47a1"),  
         spaceAfter=20,
     )
     normal_style = styles["Normal"]
 
-    # Header
     story.append(Paragraph("BSPI COMPUTER CLUB", title_style))
     story.append(Paragraph(f"Quiz Result for <b>{lesson.title}</b>", normal_style))
     story.append(Paragraph(f"Student: <b>{request.user.username}</b>", normal_style))
     story.append(Paragraph(f"Score: <b>{attempt.score}</b> / {attempt.total}", normal_style))
     story.append(Spacer(1, 0.3 * inch))
 
-    # Table data (NO 'Your Answer' column)
     data = [["#", "Question", "Options", "Correct Answer"]]
 
     for i, q in enumerate(questions, start=1):
@@ -128,7 +118,6 @@ def download_quiz_pdf(request, lesson_id):
             Paragraph(correct, normal_style),
         ])
 
-    # Table formatting
     table = Table(data, colWidths=[30, 180, 200, 140])
     table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1565c0")),  # Header bg
@@ -230,7 +219,7 @@ def get_posts(request):
     return JsonResponse({'posts': posts_data})
 
 def clean_input(text):
-    allowed_tags = []  # kono tag allow korben na
+    allowed_tags = []  
     allowed_attrs = {}
     return bleach.clean(text, tags=allowed_tags, attributes=allowed_attrs, strip=True)
 class CustomLoginView(LoginView):
@@ -259,8 +248,8 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False  # Optional: to disable login
-            user.is_approved = False  # Must be approved by leader
+            user.is_active = False 
+            user.is_approved = False 
             user.save()
 
             messages.success(request, "Registration successful! Wait for leader approval.")
@@ -272,7 +261,7 @@ def register_view(request):
 def post_login_redirect(request):
     if request.user.is_authenticated:
         if request.user.is_superuser or request.user.is_staff:
-            return redirect('leader_dashboard')  # or admin dashboard
+            return redirect('leader_dashboard')  
         else:
             return redirect('user_dashboard')
     else:
@@ -313,10 +302,10 @@ def register(request):
             code = generate_verification_code()
             user.verification_code = code
             user.set_password(form.cleaned_data['password'])
-            user.is_active = False  # inactive until verify
+            user.is_active = False  
             user.save()
             send_verification_email(user.email, code)
-            request.session['email'] = user.email  # save email in session
+            request.session['email'] = user.email 
             return redirect('verify')
     else:
         form = RegistrationForm()
@@ -326,10 +315,10 @@ def create_help_post(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        image = request.FILES.get('image')  # ✅ handle uploaded image
+        image = request.FILES.get('image')  
 
         HelpPost.objects.create(user=request.user, title=title, content=content, image=image)
-        return redirect('help_section')  # redirect to post list
+        return redirect('help_section')  
 
     return render(request, 'help_post_create.html')
 
@@ -356,7 +345,7 @@ def verify(request):
                 login(request, user)
                 return redirect('post_login_redirect')
             else:
-                return render(request, 'pending_approval.html')  # Not approved yet
+                return render(request, 'pending_approval.html')  
         else:
             return render(request, 'verify.html', {
                 'error': '❌ Invalid verification code. Please try again.'
@@ -371,7 +360,7 @@ def post_login_redirect(request):
     user = request.user
     if user.is_leader:
         return redirect('leader_dashboard')
-    return redirect('user_dashboard')  # সাধারণ member এর জন্য
+    return redirect('user_dashboard')  
 
 
 
@@ -381,14 +370,14 @@ def leader_dashboard(request):
     if not user.is_leader:
         return redirect('home')
 
-    # Approved members under this leader
+    
     approved_members = CustomUser.objects.filter(
         wing=user.wing,
         is_leader=False,
         is_approved=True
     )
 
-    # Pending members under this leader (awaiting approval)
+   
     pending_members = CustomUser.objects.filter(
         wing=user.wing,
         is_leader=False,
@@ -409,10 +398,10 @@ def approve_member(request, user_id):
 
     member = CustomUser.objects.get(id=user_id, wing=request.user.wing)
     member.is_approved = True
-    member.is_active = True  # enable login
+    member.is_active = True  
     member.save()
 
-    # ✅ Send email notification
+    
     subject = "🎉 You're Approved to Login - BSPI Computer Club"
     message = f"Hi {member.username},\n\nYour account has been approved by your leader. You can now log in and access the system.\n\nGo to: https://your-domain.com/login\n\nThanks,\nBSPI Computer Club"
     from_email = settings.DEFAULT_FROM_EMAIL

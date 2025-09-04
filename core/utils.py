@@ -6,7 +6,7 @@ def generate_verification_code():
 
 def send_verification_email(email, code):
     subject = '🔒 Email Verification Code'
-    plain_message = f'Your verification code is: {code}'  # fallback for non-HTML clients
+    plain_message = f'Your verification code is: {code}' 
     from_email = 'noreply@bspi.com'
     recipient_list = [email]
 
